@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.github.luversof</groupId>
+		<artifactId>bluesky-boot-connectioninfo-parent</artifactId>
+		<version>3.4.0-SNAPSHOT</version>
+		<relativePath>../bluesky-boot-connectioninfo-parent</relativePath>
+	</parent>
+	<artifactId>bluesky-boot-connectioninfo</artifactId>
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>io.github.luversof</groupId>
+			<artifactId>bluesky-boot-autoconfigure-devcheck</artifactId>
+			<optional>true</optional>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- (s) sevlet web-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!-- (e) sevlet web-->
+		
+		<!-- (s) test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- (e) test -->
+	
+	</dependencies>
+</project>

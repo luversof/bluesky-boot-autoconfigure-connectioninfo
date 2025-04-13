@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>bluesky-boot-connectioninfo-build</artifactId>
+	<packaging>pom</packaging>
+	<parent>
+		<groupId>io.github.luversof</groupId>
+		<artifactId>bluesky-boot-connectioninfo-dependencies</artifactId>
+		<version>3.4.0-SNAPSHOT</version>
+		<relativePath>./bluesky-boot-connectioninfo-dependencies</relativePath>
+	</parent>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>A library for managing connectioninfo.</description>
+	<url>https://github.com/luversof/bluesky-boot-autoconfigure-connectioninfo</url>
+  
+	<modules>
+		<module>bluesky-boot-connectioninfo-parent</module>
+		<module>bluesky-boot-connectioninfo</module>
+		<module>bluesky-boot-connectioninfo-dependencies</module>
+		<module>bluesky-boot-autoconfigure-connectioninfo</module>
+		<module>bluesky-boot-connectioninfo-datasource</module>
+		<module>
+			bluesky-boot-autoconfigure-connectioninfo-datasource
+		</module>
+		<module>bluesky-boot-connectioninfo-jdbc</module>
+		<module>bluesky-boot-autoconfigure-connectioninfo-jdbc</module>
+	</modules>
+	
+	<inceptionYear>2025</inceptionYear>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git://github.com/luversof/bluesky-boot-autoconfigure-connectioninfo.git</connection>
+		<developerConnection>scm:git:ssh://github.com:luversof/bluesky-boot-autoconfigure-connectioninfo.git</developerConnection>
+		<url>http://github.com/luversof/bluesky-boot-autoconfigure-connectioninfo/tree/main</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>luversof</name>
+			<email>luversof@hanmail.net</email>
+		</developer>
+	</developers>
+</project>
