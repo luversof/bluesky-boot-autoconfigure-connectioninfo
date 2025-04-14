@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @ConfigurationProperties(prefix = "bluesky-boot.connection-info")
 public class ConnectionInfoProperties {
 	
+	private boolean enabled = true;
+	
 	/**
 	 * Manage loader information for each loader and a list of connection targets to be called through the loader.
 	 */

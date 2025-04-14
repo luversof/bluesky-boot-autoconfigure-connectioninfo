@@ -13,6 +13,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<bluesky-boot-connectioninfo.version>3.4.0-SNAPSHOT</bluesky-boot-connectioninfo.version>
+		<bluesky-boot-crypto.version>3.4.0-SNAPSHOT</bluesky-boot-crypto.version>
 		<bluesky-boot-devcheck.version>3.4.0-SNAPSHOT</bluesky-boot-devcheck.version>
 		
 		<maven-plugin-plugin.version>3.15.1</maven-plugin-plugin.version>
@@ -44,6 +45,15 @@
 				<version>${bluesky-boot-connectioninfo.version}</version>
 			</dependency>
 			<!-- (e) bluesky boot connectioninfo -->
+			
+			
+			<!-- (s) bluesky boot crypto -->
+			<dependency>
+				<groupId>io.github.luversof</groupId>
+				<artifactId>bluesky-boot-crypto</artifactId>
+				<version>${bluesky-boot-crypto.version}</version>
+			</dependency>
+			<!-- (e) bluesky boot crypto -->
 			
 			<!-- (s) bluesky boot devcheck -->
 			<dependency>
