@@ -1,30 +1,26 @@
 package io.github.luversof.boot.connectioninfo;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import io.github.luversof.boot.devcheck.annotation.DevCheckController;
 import io.github.luversof.boot.devcheck.annotation.DevCheckDescription;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @DevCheckController
 @RequestMapping(value = "/blueskyBoot/connectionInfo", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ConnectionInfoDevCheckController implements ApplicationContextAware {
-
-	private ApplicationContext applicationContext;
+public class ConnectionInfoDevCheckController {
 	
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
+	private List<ConnectionInfoRegistry<?>> connectionInfoRegistryList;
 	
-	@DevCheckDescription("test")
-	@GetMapping("/test")
-	String test() {
-		return "";
+	@DevCheckDescription("connectionInfoRegistryList")
+	@GetMapping("/connectionInfoRegistryList")
+	List<ConnectionInfoRegistry<?>> connectionInfoRegistryList() {
+		return connectionInfoRegistryList;
 	}
 	
 }

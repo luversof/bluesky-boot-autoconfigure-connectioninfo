@@ -2,12 +2,21 @@ package io.github.luversof.boot.connectioninfo;
 
 import java.util.List;
 
-public interface ConnectionInfoRegistry {
+@FunctionalInterface
+public interface ConnectionInfoRegistry<T> {
 	
-	void addConnectionInfo(ConnectionInfo<?> connectionInfo);
+	List<ConnectionInfo<T>> getConnectionInfoList();
 	
-	void addConnectionInfoList(List<ConnectionInfo<?>> connectionInfoList);
+	default void addConnectionInfo(ConnectionInfo<T> connectionInfo) {
+		getConnectionInfoList().add(connectionInfo);
+	}
 	
-	ConnectionInfo<?> getConnectionInfo(ConnectionInfoKey connectionInfoKey);  
+	default void addConnectionInfoList(List<ConnectionInfo<T>> connectionInfoList) {
+		getConnectionInfoList().addAll(connectionInfoList);
+	}
+	
+	default ConnectionInfo<T> getConnectionInfo(ConnectionInfoKey connectionInfoKey) {
+		return getConnectionInfoList().stream().filter(connectionInfo -> connectionInfo.getKey().equals(connectionInfoKey)).findAny().orElseThrow(() -> new RuntimeException("NOT_EXIST_CONNECTIONINFO"));
+	}  
 
 }

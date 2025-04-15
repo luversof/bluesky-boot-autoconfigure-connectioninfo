@@ -1,5 +1,8 @@
 package io.github.luversof.boot.autoconfigure.connectioninfo.jdbc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -14,7 +17,10 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import com.zaxxer.hikari.HikariDataSource;
 
 import io.github.luversof.boot.autoconfigure.connectioninfo.ConnectionInfoAutoConfiguration;
+import io.github.luversof.boot.connectioninfo.ConnectionInfo;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
 import io.github.luversof.boot.connectioninfo.jdbc.MariaDbHikariDataSourceConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.jdbc.SQLServerHikariDataSourceConnectionInfoLoader;
 
@@ -25,7 +31,7 @@ import io.github.luversof.boot.connectioninfo.jdbc.SQLServerHikariDataSourceConn
 		ConnectionInfoAutoConfiguration.class
 	}
 )
-@ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
+@ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class, HikariDataSource.class })
 @ConditionalOnProperty(prefix = "bluesky-boot.connection-info", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ConnectionInfoJdbcAutoConfiguration {
 
@@ -51,6 +57,13 @@ public class ConnectionInfoJdbcAutoConfiguration {
 			return new SQLServerHikariDataSourceConnectionInfoLoader(connectionInfoProperties);
 		}
 		
+	}
+	
+	@Bean
+	ConnectionInfoRegistry<HikariDataSource> dataSourceConnectionInfoRegistry(List<ConnectionInfoLoader<HikariDataSource>> connectionInfoLoaderList) {
+		var connectionInfoList = new ArrayList<ConnectionInfo<HikariDataSource>>();
+		connectionInfoLoaderList.forEach(connectionInfoLoader -> connectionInfoList.addAll(connectionInfoLoader.load()));
+		return () -> connectionInfoList;
 	}
 
 }
