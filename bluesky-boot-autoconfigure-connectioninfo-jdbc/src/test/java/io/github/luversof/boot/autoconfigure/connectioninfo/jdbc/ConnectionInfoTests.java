@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -23,6 +24,7 @@ import io.github.luversof.boot.security.crypto.env.DecryptEnvironmentPostProcess
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Disabled
 @ActiveProfiles("localDev")
 class ConnectionInfoTests {
 

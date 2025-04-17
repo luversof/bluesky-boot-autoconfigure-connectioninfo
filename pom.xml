@@ -17,10 +17,6 @@
 		<module>bluesky-boot-connectioninfo</module>
 		<module>bluesky-boot-connectioninfo-dependencies</module>
 		<module>bluesky-boot-autoconfigure-connectioninfo</module>
-		<module>bluesky-boot-connectioninfo-datasource</module>
-		<module>
-			bluesky-boot-autoconfigure-connectioninfo-datasource
-		</module>
 		<module>bluesky-boot-connectioninfo-jdbc</module>
 		<module>bluesky-boot-autoconfigure-connectioninfo-jdbc</module>
 	</modules>
