@@ -17,10 +17,10 @@ public class ConnectionInfoDevCheckController {
 	
 	private List<ConnectionInfoRegistry<?>> connectionInfoRegistryList;
 	
-	@DevCheckDescription("connectionInfoRegistryList")
-	@GetMapping("/connectionInfoRegistryList")
-	List<ConnectionInfoRegistry<?>> connectionInfoRegistryList() {
-		return connectionInfoRegistryList;
+	@DevCheckDescription("connectionInfoKeyList")
+	@GetMapping("/connectionInfoKeyList")
+	List<ConnectionInfoKey> connectionInfoKeyList() {
+		return connectionInfoRegistryList.stream().flatMap(x -> x.getConnectionInfoList().stream()).map(x -> x.getKey()).toList();
 	}
 	
 }
