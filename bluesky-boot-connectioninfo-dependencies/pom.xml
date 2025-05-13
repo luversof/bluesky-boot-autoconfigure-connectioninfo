@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.luversof</groupId>
 	<artifactId>bluesky-boot-connectioninfo-dependencies</artifactId>
-	<version>3.4.0-SNAPSHOT</version>
+	<version>3.4.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -12,9 +12,9 @@
 	</parent>
 	<properties>
 		<java.version>21</java.version>
-		<bluesky-boot-connectioninfo.version>3.4.0-SNAPSHOT</bluesky-boot-connectioninfo.version>
-		<bluesky-boot-crypto.version>3.4.0-SNAPSHOT</bluesky-boot-crypto.version>
-		<bluesky-boot-devcheck.version>3.4.0-SNAPSHOT</bluesky-boot-devcheck.version>
+		<bluesky-boot-connectioninfo.version>3.4.1-SNAPSHOT</bluesky-boot-connectioninfo.version>
+		<bluesky-boot-crypto.version>3.4.1-SNAPSHOT</bluesky-boot-crypto.version>
+		<bluesky-boot-devcheck.version>3.4.1-SNAPSHOT</bluesky-boot-devcheck.version>
 		
 		<!-- (s) central -->
 		<central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
