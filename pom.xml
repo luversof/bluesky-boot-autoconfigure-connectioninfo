@@ -16,9 +16,11 @@
 		<module>bluesky-boot-connectioninfo-parent</module>
 		<module>bluesky-boot-connectioninfo</module>
 		<module>bluesky-boot-connectioninfo-dependencies</module>
-		<module>bluesky-boot-autoconfigure-connectioninfo</module>
 		<module>bluesky-boot-connectioninfo-jdbc</module>
+		<module>bluesky-boot-connectioninfo-mongodb</module>
+		<module>bluesky-boot-autoconfigure-connectioninfo</module>
 		<module>bluesky-boot-autoconfigure-connectioninfo-jdbc</module>
+		<module>bluesky-boot-autoconfigure-connectioninfo-mongodb</module>
 	</modules>
 	
 	<inceptionYear>2025</inceptionYear>

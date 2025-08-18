@@ -41,7 +41,17 @@
 			</dependency>
 			<dependency>
 				<groupId>io.github.luversof</groupId>
+				<artifactId>bluesky-boot-connectioninfo-mongodb</artifactId>
+				<version>${bluesky-boot-connectioninfo.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.luversof</groupId>
 				<artifactId>bluesky-boot-autoconfigure-connectioninfo-jdbc</artifactId>
+				<version>${bluesky-boot-connectioninfo.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.luversof</groupId>
+				<artifactId>bluesky-boot-autoconfigure-connectioninfo-mongodb</artifactId>
 				<version>${bluesky-boot-connectioninfo.version}</version>
 			</dependency>
 			<!-- (e) bluesky boot connectioninfo -->
