@@ -59,7 +59,7 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 
 	@Override
 	public List<ConnectionInfo<T>> load(List<String> connectionList) {
-		var loaderJdbcTemplate = getJdbcTemplate();
+		var loaderJdbcTemplate = getLoaderJdbcTemplate();
 		
 		String sql = MessageFormat.format(getLoaderQuery(), String.join(",", Collections.nCopies(connectionList.size(), "?")));
 		
@@ -94,7 +94,7 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 	
 	protected abstract ConnectionInfo<T> createConnectionInfo(ConnectionInfoRowMapper connectionInfoRowMapper);
 	
-	private JdbcTemplate getJdbcTemplate() {
+	private JdbcTemplate getLoaderJdbcTemplate() {
 		var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
 		
 		var loaderProperties = connectionInfoProperties.getLoaders().get(getLoaderKey()).getProperties();
