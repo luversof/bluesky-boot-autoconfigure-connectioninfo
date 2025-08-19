@@ -54,7 +54,7 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		
 		
 		try(var loaderMongoClient = getLoaderMongoClient()) {
-			var database = loaderMongoClient.getDatabase(getProperties("connectionString"));
+			var database = loaderMongoClient.getDatabase(getProperties("database"));
 			MongoCollection<Document> collection = database.getCollection("ConnectionInfo");
 
 				// query: { "connection": { "$in": [ "conn1", "conn2", "conn3" ] } }
