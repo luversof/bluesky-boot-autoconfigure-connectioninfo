@@ -54,18 +54,18 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		
 		
 		try(var loaderMongoClient = getLoaderMongoClient()) {
-			var database = loaderMongoClient.getDatabase(getProperties("database"));
-			MongoCollection<Document> collection = database.getCollection("ConnectionInfo");
+			var mongoDatabase = loaderMongoClient.getDatabase(getProperties("database"));
+			MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("ConnectionInfo");
 
 				// query: { "connection": { "$in": [ "conn1", "conn2", "conn3" ] } }
 				Document query = new Document("connection", new Document("$in", connectionList));
 
-				FindIterable<Document> results = collection.find(query);
+				FindIterable<ConnectionInfoRowMapper> results = mongoCollection.find(query, ConnectionInfoRowMapper.class);
 
 				// 결과 출력
-				for (Document doc : results) {
+				for (var result : results) {
 					System.out.println("출력!!@!");
-					System.out.println(doc.toJson());
+					System.out.println(result);
 				}
 			
 		}
@@ -100,6 +100,10 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
 		var loaderProperties = connectionInfoProperties.getLoaders().get(getLoaderKey()).getProperties();
 		return encryptor.decrypt(loaderProperties.get(key));
+	}
+	
+	public static record ConnectionInfoRowMapper(String connection, String connectionString, String database) {
+		
 	}
 
 }
