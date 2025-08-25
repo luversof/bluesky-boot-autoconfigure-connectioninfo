@@ -1,7 +1,19 @@
 package io.github.luversof.boot.connectioninfo.mongodb;
 
 import io.github.luversof.boot.connectioninfo.ConnectionConfig;
+import lombok.Data;
 
-public record MongoDbMongoClientConnectionConfig(String connection, String connectionString, String database, String userName, String password) implements ConnectionConfig {
+@Data
+public class MongoDbMongoClientConnectionConfig implements ConnectionConfig {
+
+	private String connection;
+	
+	private String connectionString;
+	
+	private String database;
+	
+	private String userName;
+	
+	private String password;
 
 }

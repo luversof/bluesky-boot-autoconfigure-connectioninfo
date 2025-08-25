@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
 import lombok.Getter;
 
-public class SQLServerDataSourceConnectionConfigReader extends AbstractDataSourceConnectionConfigReader<SQLServerDataSourceConnectionConfig> {
+public class SQLServerDataSourceConnectionConfigReader extends AbstractDataSourceConnectionConfigReader<DataSourceConnectionConfig> {
 
 	@Getter
 	protected String readerKey = "sqlserver-datasource";
@@ -21,8 +21,8 @@ public class SQLServerDataSourceConnectionConfigReader extends AbstractDataSourc
 	}
 	
 	@Override
-	protected RowMapper<SQLServerDataSourceConnectionConfig> getConnectionConfigRowMapper() {
-		return new DataClassRowMapper<>(SQLServerDataSourceConnectionConfig.class);
+	protected RowMapper<DataSourceConnectionConfig> getConnectionConfigRowMapper() {
+		return new DataClassRowMapper<>(DataSourceConnectionConfig.class);
 	}
 
 }

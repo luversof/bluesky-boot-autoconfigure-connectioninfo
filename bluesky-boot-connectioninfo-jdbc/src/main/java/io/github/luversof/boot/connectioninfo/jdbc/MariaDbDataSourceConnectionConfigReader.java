@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
 import lombok.Getter;
 
-public class MariaDbDataSourceConnectionConfigReader extends AbstractDataSourceConnectionConfigReader<MariaDbDataSourceConnectionConfig> {
+public class MariaDbDataSourceConnectionConfigReader extends AbstractDataSourceConnectionConfigReader<DataSourceConnectionConfig> {
 	
 	@Getter
 	protected String readerKey = "mariadb-datasource";
@@ -21,8 +21,8 @@ public class MariaDbDataSourceConnectionConfigReader extends AbstractDataSourceC
 	}
 
 	@Override
-	protected RowMapper<MariaDbDataSourceConnectionConfig> getConnectionConfigRowMapper() {
-		return new DataClassRowMapper<>(MariaDbDataSourceConnectionConfig.class);
+	protected RowMapper<DataSourceConnectionConfig> getConnectionConfigRowMapper() {
+		return new DataClassRowMapper<>(DataSourceConnectionConfig.class);
 	}
 
 }

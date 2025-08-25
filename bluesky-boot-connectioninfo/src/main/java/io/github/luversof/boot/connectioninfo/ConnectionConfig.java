@@ -5,6 +5,6 @@ package io.github.luversof.boot.connectioninfo;
  */
 public interface ConnectionConfig {
 	
-	String connection();
+	String getConnection();
 
 }

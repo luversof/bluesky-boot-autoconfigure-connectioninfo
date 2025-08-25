@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 @ConfigurationProperties(prefix = "bluesky-boot.connection-config")
 public class ConnectionConfigProperties {
 	
-	private boolean enabled = true;
-	
 	private Map<String, ConnectionConfigReaderProperties> readers = new HashMap<>();
 	
 	

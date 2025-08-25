@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.springframework.util.CollectionUtils;
 
+import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
@@ -21,16 +22,16 @@ import lombok.extern.slf4j.Slf4j;
  * @param <T> The type of DataSource to be loaded via Loader
  */
 @Slf4j
-public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSource, C extends DataSourceConnectionConfig, R extends DataSourceConnectionConfigReader<C>> implements ConnectionInfoLoader<T, C, R> {
+public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSource, C extends DataSourceConnectionConfig> implements ConnectionInfoLoader<T, C> {
 	
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected final R connectionConfigReader;
+	protected final List<ConnectionConfigReader<C>> connectionConfigReaderList;
 	
-	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, R connectionConfigReader) {
+	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
 		this.connectionInfoProperties= connectionInfoProperties;
-		this.connectionConfigReader = connectionConfigReader;
+		this.connectionConfigReaderList = connectionConfigReaderList;
 	}
 
 	@Override
@@ -50,12 +51,16 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 	@Override
 	public List<ConnectionInfo<T>> load(List<String> connectionList) {
 		
-		var reader = getConnectionConfigReader();
-		
-		List<C> connectionConfigList = reader.readConnectionConfigList(connectionList);
+		var connectionConfigList = new ArrayList<C>();
+		getConnectionConfigReaderList().forEach(connectionConfigReader -> {
+			var readConnectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
+			if (!CollectionUtils.isEmpty(readConnectionConfigList)) {
+				connectionConfigList.addAll(readConnectionConfigList);
+			}
+		});
 		
 		connectionList.forEach(connection -> {
-			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.connection().equalsIgnoreCase(connection))) {
+			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.getConnection().equalsIgnoreCase(connection))) {
 				log.debug("find database connection ({})", connection);
 			} else {
 				log.debug("cannot find database connection ({})", connection);

@@ -28,7 +28,7 @@ public class MongoDbMongoClientConnectionConfigReader implements ConnectionConfi
 	public List<MongoDbMongoClientConnectionConfig> readConnectionConfigList(List<String> connectionList) {
 		try(var loaderMongoClient = getLoaderMongoClient()) {
 			var mongoDatabase = loaderMongoClient.getDatabase(getConfigProperties("database"));
-			var mongoCollection = mongoDatabase.getCollection("ConnectionInfo");
+			var mongoCollection = mongoDatabase.getCollection("ConnectionConfig");
 			var query = new Document("connection", new Document("$in", connectionList));
 			var mongoDbMongoClientConnectionConfigList = mongoCollection.find(query, MongoDbMongoClientConnectionConfig.class);
 			return mongoDbMongoClientConnectionConfigList.into(new ArrayList<>());

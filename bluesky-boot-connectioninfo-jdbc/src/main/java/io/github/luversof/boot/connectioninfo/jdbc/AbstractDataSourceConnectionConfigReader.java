@@ -21,8 +21,8 @@ public abstract class AbstractDataSourceConnectionConfigReader<C extends DataSou
 	@Getter
 	protected String loaderQuery = """
 		SELECT connection, url, username, password, extradata 
-		FROM DataSourceConfig
-		WHERE ConnectionConfig IN ({0})
+		FROM ConnectionConfig
+		WHERE connection IN ({0})
 		""";
 	
 	protected AbstractDataSourceConnectionConfigReader(ConnectionConfigProperties connectionConfigProperties) {

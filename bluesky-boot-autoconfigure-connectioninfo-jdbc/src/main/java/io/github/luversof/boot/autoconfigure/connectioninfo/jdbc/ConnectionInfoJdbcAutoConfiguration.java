@@ -18,12 +18,12 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import io.github.luversof.boot.autoconfigure.connectioninfo.ConnectionInfoAutoConfiguration;
 import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
+import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
 import io.github.luversof.boot.connectioninfo.jdbc.DataSourceConnectionConfig;
-import io.github.luversof.boot.connectioninfo.jdbc.DataSourceConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.jdbc.MariaDbDataSourceConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.jdbc.MariaDbHikariDataSourceConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.jdbc.SQLServerDataSourceConnectionConfigReader;
@@ -37,7 +37,6 @@ import io.github.luversof.boot.connectioninfo.jdbc.SQLServerHikariDataSourceConn
 	}
 )
 @ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class, HikariDataSource.class })
-@ConditionalOnProperty(prefix = "bluesky-boot.connection-info", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ConnectionInfoJdbcAutoConfiguration {
 
 	@Configuration(proxyBeanMethods = false)
@@ -52,8 +51,8 @@ public class ConnectionInfoJdbcAutoConfiguration {
 		}
 		
 		@Bean
-		MariaDbHikariDataSourceConnectionInfoLoader mariaDbHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, MariaDbDataSourceConnectionConfigReader mariaDbDataSourceConnectionConfigReader) {
-			return new MariaDbHikariDataSourceConnectionInfoLoader(connectionInfoProperties, mariaDbDataSourceConnectionConfigReader);
+		<C extends DataSourceConnectionConfig> MariaDbHikariDataSourceConnectionInfoLoader<C> mariaDbHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
+			return new MariaDbHikariDataSourceConnectionInfoLoader<>(connectionInfoProperties, connectionConfigReaderList);
 		}
 		
 	}
@@ -71,15 +70,15 @@ public class ConnectionInfoJdbcAutoConfiguration {
 		
 		
 		@Bean
-		SQLServerHikariDataSourceConnectionInfoLoader sqlServerHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, SQLServerDataSourceConnectionConfigReader sqlServerDataSourceConnectionConfigReader) {
-			return new SQLServerHikariDataSourceConnectionInfoLoader(connectionInfoProperties, sqlServerDataSourceConnectionConfigReader);
+		<C extends DataSourceConnectionConfig> SQLServerHikariDataSourceConnectionInfoLoader<C> sqlServerHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
+			return new SQLServerHikariDataSourceConnectionInfoLoader<>(connectionInfoProperties, connectionConfigReaderList);
 		}
 		
 	}
 	
 	@Bean
-	ConnectionInfoRegistry<HikariDataSource> dataSourceConnectionInfoRegistry(List<ConnectionInfoLoader<HikariDataSource, DataSourceConnectionConfig, DataSourceConnectionConfigReader<DataSourceConnectionConfig>>> connectionInfoLoaderList) {
-		var connectionInfoList = new ArrayList<ConnectionInfo<HikariDataSource>>();
+	<T extends HikariDataSource, C extends DataSourceConnectionConfig> ConnectionInfoRegistry<T> dataSourceConnectionInfoRegistry(List<ConnectionInfoLoader<T, C>> connectionInfoLoaderList) {
+		var connectionInfoList = new ArrayList<ConnectionInfo<T>>();
 		connectionInfoLoaderList.forEach(connectionInfoLoader -> connectionInfoList.addAll(connectionInfoLoader.load()));
 		return () -> connectionInfoList;
 	}

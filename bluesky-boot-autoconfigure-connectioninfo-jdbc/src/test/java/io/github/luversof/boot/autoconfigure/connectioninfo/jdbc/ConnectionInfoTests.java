@@ -5,15 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 
 import io.github.luversof.boot.autoconfigure.connectioninfo.ConnectionInfoAutoConfiguration;
 import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
@@ -21,14 +17,13 @@ import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties.Connect
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties.ConnectionInfoLoaderProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
+import io.github.luversof.boot.connectioninfo.jdbc.DataSourceConnectionConfig;
 import io.github.luversof.boot.connectioninfo.jdbc.MariaDbDataSourceConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.jdbc.MariaDbHikariDataSourceConnectionInfoLoader;
 import io.github.luversof.boot.security.crypto.env.DecryptEnvironmentPostProcessor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Disabled
-@ActiveProfiles("localDev")
 class ConnectionInfoTests {
 
 
@@ -38,21 +33,18 @@ class ConnectionInfoTests {
 			.withPropertyValues("spring.profiles.active=localdev")
 			.withPropertyValues(
 				"bluesky-boot.connection-config.readers.mariadb-datasource.enabled=true",
-				"bluesky-boot.connection-config.readers.mariadb-datasource.properties.url=jdbc:mariadb://mariadb.bluesky.local:3306/connection_info",
-				"bluesky-boot.connection-config.readers.mariadb-datasource.properties.username={text}dd2d9a9a3735b9f9a63664dca900b04e34d92759a43d301c74dd60d235c9576c",
-				"bluesky-boot.connection-config.readers.mariadb-datasource.properties.password={text}dd2d9a9a3735b9f9a63664dca900b04e34d92759a43d301c74dd60d235c9576c",
+				"bluesky-boot.connection-config.readers.mariadb-datasource.properties.url=jdbc:mariadb://mariadb.bluesky.local:3306/connection_info_localdev",
+				"bluesky-boot.connection-config.readers.mariadb-datasource.properties.username={text}df9b549831440b381434dee7d1e7169eb80e2453abb28e184358f552cf561b33",
+				"bluesky-boot.connection-config.readers.mariadb-datasource.properties.password={text}df9b549831440b381434dee7d1e7169eb80e2453abb28e184358f552cf561b33",
 				"bluesky-boot.connection-info.loaders.mariadb-datasource.enabled=true",
 				"bluesky-boot.connection-info.loaders.mariadb-datasource.connections.mapexample=test1",
 				"bluesky-boot.connection-config.readers.sqlserver-datasource.enabled=true",
 				"bluesky-boot.connection-config.readers.sqlserver-datasource.properties.url=jdbc:sqlserver://mssql.bluesky.local;encrypt=false;databaseName=connection_info",
-				"bluesky-boot.connection-config.readers.sqlserver-datasource.properties.username={text}6dfa79bdb4311fe011683a2fbf1b281eb6bfe47523575919533e1c0a99986dfa",
-				"bluesky-boot.connection-config.readers.sqlserver-datasource.properties.password={text}cd59e88989c267f8e68e5195fd9e8cc16110118a78f04f14da9f72aa4eda0b85",
+				"bluesky-boot.connection-config.readers.sqlserver-datasource.properties.username={text}402dc2850a816b6594e8b2d0293cb87251209160720a66b1f2a25c9760df58ac",
+				"bluesky-boot.connection-config.readers.sqlserver-datasource.properties.password={text}0704d3da6333d293af85804a0ea58884734b4283026956835e8de40ce0d3480e",
 				"bluesky-boot.connection-info.loaders.sqlserver-datasource.enabled=true",
 				"bluesky-boot.connection-info.loaders.sqlserver-datasource.connections.mapexample=test1"
 			)
-			.withPropertyValues("bluesky-boot.core.modules.test.domain.web=http://localhost")
-			.withPropertyValues("bluesky-boot.core.modules.test.core-module-info=T(io.github.luversof.boot.autoconfigure.core.constant.TestCoreModuleInfo).TEST")
-			.withConfiguration(AutoConfigurations.of(DataSourceAutoConfiguration.class))
 			.withUserConfiguration(ConnectionInfoAutoConfiguration.class)
 			.withUserConfiguration(ConnectionInfoJdbcAutoConfiguration.class)
 			;
@@ -67,7 +59,7 @@ class ConnectionInfoTests {
 	}
 	
 	@Test
-	void mariaDbDataSourceConnectionInfoTest() {
+	<C extends DataSourceConnectionConfig> void mariaDbDataSourceConnectionInfoTest() {
 		
 		var connectionConfigProperties = new ConnectionConfigProperties();
 		connectionConfigProperties.setReaders(
@@ -76,7 +68,7 @@ class ConnectionInfoTests {
 					ConnectionConfigReaderProperties.builder()
 						.properties(
 							Map.of(
-								"url", "jdbc:mariadb://mariadb.bluesky.local:3306/connection_info",
+								"url", "jdbc:mariadb://mariadb.bluesky.local:3306/connection_info_localdev",
 								"username", "root",
 								"password", "root"
 							)
@@ -96,7 +88,7 @@ class ConnectionInfoTests {
 				)
 		);
 		
-		var connectionInfoLoader = new MariaDbHikariDataSourceConnectionInfoLoader(connectionInfoProperties, connectionConfigReader);
+		var connectionInfoLoader = new MariaDbHikariDataSourceConnectionInfoLoader<DataSourceConnectionConfig>(connectionInfoProperties, List.of(connectionConfigReader));
 		var connectionInfoList = connectionInfoLoader.load();
 		
 		log.debug("connectionInfoList : {}", connectionInfoList);
@@ -112,14 +104,12 @@ class ConnectionInfoTests {
 	@Test
 	void mariaDbDataSourceConnectionInfoReaderTest() {
 		this.contextRunner.run(context -> {
-			var beanName = "mariaDbDataSourceConnectionInfoCollector";
-			assertThat(context).hasBean(beanName);
 			var connectionConfigProperties = context.getBean(ConnectionConfigProperties.class);
 			
 			log.debug("connectionConfigProperties : {}", connectionConfigProperties);
 			log.debug("connectionConfigProperties username : {}", connectionConfigProperties.getReaders().get("mariadb-datasource").getProperties().get("username"));
 			
-			var connectionInfoRegistry = context.getBean(beanName, ConnectionInfoRegistry.class);
+			var connectionInfoRegistry = context.getBean(ConnectionInfoRegistry.class);
 			log.debug("connectionInfoRegistry : {}", connectionInfoRegistry.getConnectionInfoList());
 		});
 	}
@@ -127,14 +117,12 @@ class ConnectionInfoTests {
 	@Test
 	void sqlServerDataSourceConnectionInfoReaderTest() {
 		this.contextRunner.run(context -> {
-			var beanName = "sqlServerDataSourceConnectionInfoCollector";
-			assertThat(context).hasBean(beanName);
 			var connectionConfigProperties = context.getBean(ConnectionConfigProperties.class);
 			
 			log.debug("connectionConfigProperties : {}", connectionConfigProperties);
 			log.debug("connectionConfigProperties username : {}", connectionConfigProperties.getReaders().get("sqlserver-datasource").getProperties().get("username"));
 			
-			var connectionInfoRegistry = context.getBean(beanName, ConnectionInfoRegistry.class);
+			var connectionInfoRegistry = context.getBean(ConnectionInfoRegistry.class);
 			log.debug("connectionInfoRegistry : {}", connectionInfoRegistry.getConnectionInfoList());
 		});
 	}

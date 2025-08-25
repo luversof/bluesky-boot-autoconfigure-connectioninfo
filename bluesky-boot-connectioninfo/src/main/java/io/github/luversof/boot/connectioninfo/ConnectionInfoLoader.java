@@ -9,7 +9,7 @@ import java.util.List;
  * @param <T> Target type to load via Loader
  * @param <C> ConnectionConfig type to be used
  */
-public interface ConnectionInfoLoader<T, C extends ConnectionConfig, R extends ConnectionConfigReader<C>> {
+public interface ConnectionInfoLoader<T, C extends ConnectionConfig> {
 	
 	/**
 	 * Key to be used among the keys in the ConnectionInfoLoaderProperties loader map
@@ -18,7 +18,7 @@ public interface ConnectionInfoLoader<T, C extends ConnectionConfig, R extends C
 	 */
 	String getLoaderKey();
 	
-	R getConnectionConfigReader();
+	List<ConnectionConfigReader<C>> getConnectionConfigReaderList();
 
 	/**
 	 * Method for handling load without parameters

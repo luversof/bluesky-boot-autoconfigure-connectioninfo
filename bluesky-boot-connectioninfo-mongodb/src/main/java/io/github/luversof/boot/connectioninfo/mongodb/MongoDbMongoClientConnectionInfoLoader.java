@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.util.CollectionUtils;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
+import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoKey;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
@@ -17,7 +20,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoader<MongoClient, MongoDbMongoClientConnectionConfig, MongoDbMongoClientConnectionConfigReader> {
+public class MongoDbMongoClientConnectionInfoLoader<C extends MongoDbMongoClientConnectionConfig> implements ConnectionInfoLoader<MongoClient, C> {
 	
 
 	@Getter
@@ -26,11 +29,11 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected final MongoDbMongoClientConnectionConfigReader connectionConfigReader;
+	protected final List<ConnectionConfigReader<C>> connectionConfigReaderList;
 	
-	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, MongoDbMongoClientConnectionConfigReader connectionConfigReader) {
+	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
 		this.connectionInfoProperties = connectionInfoProperties;
-		this.connectionConfigReader = connectionConfigReader;
+		this.connectionConfigReaderList = connectionConfigReaderList;
 	}
 
 	@Override
@@ -54,12 +57,24 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		}
 		
 		
-
-		var connectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
+		var connectionConfigReaderList = getConnectionConfigReaderList();
 		
+		if (connectionConfigReaderList == null || connectionConfigReaderList.isEmpty()) {
+			return Collections.emptyList();
+		}
+		
+		var connectionConfigList = new ArrayList<C>();
+		getConnectionConfigReaderList().forEach(connectionConfigReader -> {
+			var readConnectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
+			if (!CollectionUtils.isEmpty(readConnectionConfigList)) {
+				connectionConfigList.addAll(readConnectionConfigList);
+			}
+		});
+		
+
 		connectionList.forEach(connection -> {
 			
-			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.connection().equalsIgnoreCase(connection))) {
+			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.getConnection().equalsIgnoreCase(connection))) {
 				log.debug("find database connection ({})", connection);
 			} else {
 				log.debug("cannot find database connection ({})", connection);
@@ -79,12 +94,12 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 	
 	private ConnectionInfo<MongoClient> createConnectionInfo(MongoDbMongoClientConnectionConfig connectionConfig) {
 		MongoClientSettings.builder()
-			.applyConnectionString(new ConnectionString(connectionConfig.connectionString()))
+			.applyConnectionString(new ConnectionString(connectionConfig.getConnectionString()))
 			// adjust database
 			.build();
 		
-		var mongoClient = MongoClients.create(connectionConfig.connectionString());
-		return new ConnectionInfo<MongoClient>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.connection()), mongoClient);
+		var mongoClient = MongoClients.create(connectionConfig.getConnectionString());
+		return new ConnectionInfo<MongoClient>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.getConnection()), mongoClient);
 	}
 
 }
