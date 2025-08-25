@@ -50,8 +50,6 @@ class ConnectionInfoTests {
 				"bluesky-boot.connection-info.loaders.sqlserver-datasource.enabled=true",
 				"bluesky-boot.connection-info.loaders.sqlserver-datasource.connections.mapexample=test1"
 			)
-			.withPropertyValues("bluesky-boot.core.modules.test.domain.web=http://localhost")
-			.withPropertyValues("bluesky-boot.core.modules.test.core-module-info=T(io.github.luversof.boot.autoconfigure.core.constant.TestCoreModuleInfo).TEST")
 			.withConfiguration(AutoConfigurations.of(DataSourceAutoConfiguration.class))
 			.withUserConfiguration(ConnectionInfoAutoConfiguration.class)
 			.withUserConfiguration(ConnectionInfoJdbcAutoConfiguration.class)

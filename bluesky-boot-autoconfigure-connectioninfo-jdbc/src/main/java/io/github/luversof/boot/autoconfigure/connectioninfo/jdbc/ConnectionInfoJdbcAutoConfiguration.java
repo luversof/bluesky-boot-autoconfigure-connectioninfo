@@ -37,7 +37,6 @@ import io.github.luversof.boot.connectioninfo.jdbc.SQLServerHikariDataSourceConn
 	}
 )
 @ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class, HikariDataSource.class })
-@ConditionalOnProperty(prefix = "bluesky-boot.connection-info", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ConnectionInfoJdbcAutoConfiguration {
 
 	@Configuration(proxyBeanMethods = false)
