@@ -8,21 +8,21 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoKey;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 
-public abstract class AbstractHikariDataSourceConnectionInfoLoader extends AbstractDataSourceConnectionInfoLoader<HikariDataSource>{
+public abstract class AbstractHikariDataSourceConnectionInfoLoader<C extends DataSourceConnectionConfig, R extends DataSourceConnectionConfigReader<C>> extends AbstractDataSourceConnectionInfoLoader<HikariDataSource, C, R>{
 
-	protected AbstractHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties) {
-		super(connectionInfoProperties);
+	protected AbstractHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, R connectionConfigReader) {
+		super(connectionInfoProperties, connectionConfigReader);
 	}
 
 	@Override
-	protected ConnectionInfo<HikariDataSource> createConnectionInfo(ConnectionInfoRowMapper connectionInfoRowMapper) {
+	protected ConnectionInfo<HikariDataSource> createConnectionInfo(DataSourceConnectionConfig connectionConfig) {
 		var config = new HikariConfig();
 		var textEncryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
-		config.setJdbcUrl(connectionInfoRowMapper.url());
-		config.setUsername(textEncryptor.decrypt(connectionInfoRowMapper.username()));
-		config.setPassword(textEncryptor.decrypt(connectionInfoRowMapper.password()));
+		config.setJdbcUrl(connectionConfig.url());
+		config.setUsername(textEncryptor.decrypt(connectionConfig.username()));
+		config.setPassword(textEncryptor.decrypt(connectionConfig.password()));
 		var hikariDataSource = new HikariDataSource(config);
 		
-		return new ConnectionInfo<>(new ConnectionInfoKey(getLoaderKey(), connectionInfoRowMapper.connection()), hikariDataSource);
+		return new ConnectionInfo<>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.connection()), hikariDataSource);
 	}
 }

@@ -1,23 +1,16 @@
 package io.github.luversof.boot.connectioninfo.jdbc;
 
-import java.sql.Driver;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
-import org.springframework.jdbc.core.DataClassRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.util.CollectionUtils;
 
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
-import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,19 +21,16 @@ import lombok.extern.slf4j.Slf4j;
  * @param <T> The type of DataSource to be loaded via Loader
  */
 @Slf4j
-public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSource> implements ConnectionInfoLoader<T> {
+public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSource, C extends DataSourceConnectionConfig, R extends DataSourceConnectionConfigReader<C>> implements ConnectionInfoLoader<T, C, R> {
 	
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected String loaderQuery = """
-		SELECT connection, url, username, password, extradata 
-		FROM ConnectionInfo
-		WHERE connection IN ({0})
-		""";
+	protected final R connectionConfigReader;
 	
-	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties) {
+	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, R connectionConfigReader) {
 		this.connectionInfoProperties= connectionInfoProperties;
+		this.connectionConfigReader = connectionConfigReader;
 	}
 
 	@Override
@@ -59,62 +49,31 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 
 	@Override
 	public List<ConnectionInfo<T>> load(List<String> connectionList) {
-		var loaderJdbcTemplate = getLoaderJdbcTemplate();
 		
-		String sql = MessageFormat.format(getLoaderQuery(), String.join(",", Collections.nCopies(connectionList.size(), "?")));
+		var reader = getConnectionConfigReader();
 		
-		List<ConnectionInfoRowMapper> connectionInfoRowMapperList = loaderJdbcTemplate.query(sql, new ArgumentPreparedStatementSetter(connectionList.toArray()), new DataClassRowMapper<ConnectionInfoRowMapper>(ConnectionInfoRowMapper.class));
+		List<C> connectionConfigList = reader.readConnectionConfigList(connectionList);
 		
 		connectionList.forEach(connection -> {
-			if (connectionInfoRowMapperList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.connection().equalsIgnoreCase(connection))) {
+			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.connection().equalsIgnoreCase(connection))) {
 				log.debug("find database connection ({})", connection);
 			} else {
 				log.debug("cannot find database connection ({})", connection);
 			}
 		});
 		
-		if (CollectionUtils.isEmpty(connectionInfoRowMapperList)) {
+		if (CollectionUtils.isEmpty(connectionConfigList)) {
 			return Collections.emptyList();
 		}
 
 		var connectionInfoList = new ArrayList<ConnectionInfo<T>>();
-		for (var connectionInfoRowMapper : connectionInfoRowMapperList) {
-			connectionInfoList.add(createConnectionInfo(connectionInfoRowMapper));
+		for (var connectionConfig : connectionConfigList) {
+			connectionInfoList.add(createConnectionInfo(connectionConfig));
 		}
 		
 		return connectionInfoList;
 	}
 	
-	/**
-	 * Call the target Driver object to be used by the loader
-	 * 
-	 * @return Target Driver object
-	 */
-	protected abstract Driver getLoaderDriver();
+	protected abstract ConnectionInfo<T> createConnectionInfo(DataSourceConnectionConfig connectionConfig);
 	
-	protected abstract ConnectionInfo<T> createConnectionInfo(ConnectionInfoRowMapper connectionInfoRowMapper);
-	
-	private JdbcTemplate getLoaderJdbcTemplate() {
-		var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
-		
-		var loaderProperties = connectionInfoProperties.getLoaders().get(getLoaderKey()).getProperties();
-		String url = loaderProperties.get("url");
-		String username = encryptor.decrypt(loaderProperties.get("username"));
-		String password = encryptor.decrypt(loaderProperties.get("password"));
-		
-		return new JdbcTemplate(new SimpleDriverDataSource(getLoaderDriver(), url, username, password));
-	}
-	
-	/**
-	 * ConnectionInfoResult information obtained through the loader
-	 * 
-	 * @param connection connection
-	 * @param url url
-	 * @param username username
-	 * @param password password
-	 * @param extradata extradata
-	 */
-	public static record ConnectionInfoRowMapper(String connection, String url, String username, String password, String extradata) {
-	}
-
 }

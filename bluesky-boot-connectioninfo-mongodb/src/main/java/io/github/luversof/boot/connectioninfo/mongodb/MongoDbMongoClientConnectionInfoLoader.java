@@ -4,23 +4,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.bson.Document;
-import org.springframework.boot.origin.SystemEnvironmentOrigin;
-
+import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoKey;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
-import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
-public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoader<MongoClient> {
+@Slf4j
+public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoader<MongoClient, MongoDbMongoClientConnectionConfig, MongoDbMongoClientConnectionConfigReader> {
 	
 
 	@Getter
@@ -28,8 +25,12 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 	
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
-	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties) {
+	@Getter
+	protected final MongoDbMongoClientConnectionConfigReader connectionConfigReader;
+	
+	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, MongoDbMongoClientConnectionConfigReader connectionConfigReader) {
 		this.connectionInfoProperties = connectionInfoProperties;
+		this.connectionConfigReader = connectionConfigReader;
 	}
 
 	@Override
@@ -53,57 +54,37 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		}
 		
 		
-		try(var loaderMongoClient = getLoaderMongoClient()) {
-			var mongoDatabase = loaderMongoClient.getDatabase(getProperties("database"));
-			MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("ConnectionInfo");
 
-				// query: { "connection": { "$in": [ "conn1", "conn2", "conn3" ] } }
-				Document query = new Document("connection", new Document("$in", connectionList));
-
-				FindIterable<ConnectionInfoRowMapper> results = mongoCollection.find(query, ConnectionInfoRowMapper.class);
-
-				// 결과 출력
-				for (var result : results) {
-					System.out.println("출력!!@!");
-					System.out.println(result);
-				}
+		var connectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
+		
+		connectionList.forEach(connection -> {
 			
+			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.connection().equalsIgnoreCase(connection))) {
+				log.debug("find database connection ({})", connection);
+			} else {
+				log.debug("cannot find database connection ({})", connection);
+			}
+		});
+		
+		if (connectionConfigList.isEmpty()) {
+			return Collections.emptyList();
 		}
-		
-		// DB 선택
-//		MongoDatabase database = mongoClient.getDatabase("testdb");
-//
-//		// 컬렉션에서 문서 하나 읽기
-//		Document doc = database.getCollection("testCollection").find().first();
-//		System.out.println("First document: " + doc);
 
-
-		
-		// 어떤식으로 저장하고 호출하는게 좋을까?
-		
-		List<ConnectionInfo<MongoClient>> result = new ArrayList<>();
-//		for (String uri : connectionList) {
-//			MongoClient client = MongoClients.create(uri);
-//			ConnectionInfo<MongoClient> info = new ConnectionInfo<>();
-//			info.setConnection(client);
-//			info.setConnectionString(uri);
-//			result.add(info);
-//		}
-		return result;
+		var connectionInfoList = new ArrayList<ConnectionInfo<MongoClient>>();
+		for (var connectionConfig : connectionConfigList) {
+			connectionInfoList.add(createConnectionInfo(connectionConfig));
+		}
+		return connectionInfoList;
 	}
 	
-	private MongoClient getLoaderMongoClient() {
-		return MongoClients.create(getProperties("connectionString"));
-	}
-	
-	private String getProperties(String key) {
-		var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
-		var loaderProperties = connectionInfoProperties.getLoaders().get(getLoaderKey()).getProperties();
-		return encryptor.decrypt(loaderProperties.get(key));
-	}
-	
-	public static record ConnectionInfoRowMapper(String connection, String connectionString, String database) {
+	private ConnectionInfo<MongoClient> createConnectionInfo(MongoDbMongoClientConnectionConfig connectionConfig) {
+		MongoClientSettings.builder()
+			.applyConnectionString(new ConnectionString(connectionConfig.connectionString()))
+			// adjust database
+			.build();
 		
+		var mongoClient = MongoClients.create(connectionConfig.connectionString());
+		return new ConnectionInfo<MongoClient>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.connection()), mongoClient);
 	}
 
 }

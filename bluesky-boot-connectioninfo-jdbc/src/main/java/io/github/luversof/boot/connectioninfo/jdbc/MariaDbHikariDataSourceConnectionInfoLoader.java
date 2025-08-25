@@ -1,22 +1,15 @@
 package io.github.luversof.boot.connectioninfo.jdbc;
 
-import java.sql.Driver;
-
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import lombok.Getter;
 
-public class MariaDbHikariDataSourceConnectionInfoLoader extends AbstractHikariDataSourceConnectionInfoLoader {
+public class MariaDbHikariDataSourceConnectionInfoLoader extends AbstractHikariDataSourceConnectionInfoLoader<MariaDbDataSourceConnectionConfig, MariaDbDataSourceConnectionConfigReader> {
 
 	@Getter
 	protected String loaderKey = "mariadb-datasource";
 	
-	public MariaDbHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties) {
-		super(connectionInfoProperties);
+	public MariaDbHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, MariaDbDataSourceConnectionConfigReader connectionConfigReader) {
+		super(connectionInfoProperties, connectionConfigReader);
 	}
 
-	@Override
-	protected Driver getLoaderDriver() {
-		return new org.mariadb.jdbc.Driver();
-	}
-	
 }
