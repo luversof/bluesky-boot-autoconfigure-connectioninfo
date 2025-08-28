@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class MongoDbMongoClientConnectionInfoLoader<C extends MongoClientConnectionConfig> implements ConnectionInfoLoader<MongoClient, C> {
+public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoader<MongoClient, MongoClientConnectionConfig> {
 	
 
 	@Getter
@@ -29,9 +29,9 @@ public class MongoDbMongoClientConnectionInfoLoader<C extends MongoClientConnect
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected final List<ConnectionConfigReader<C>> connectionConfigReaderList;
+	protected final List<ConnectionConfigReader<MongoClientConnectionConfig>> connectionConfigReaderList;
 	
-	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
+	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<MongoClientConnectionConfig>> connectionConfigReaderList) {
 		this.connectionInfoProperties = connectionInfoProperties;
 		this.connectionConfigReaderList = connectionConfigReaderList;
 	}
@@ -63,7 +63,7 @@ public class MongoDbMongoClientConnectionInfoLoader<C extends MongoClientConnect
 			return Collections.emptyList();
 		}
 		
-		var connectionConfigList = new ArrayList<C>();
+		var connectionConfigList = new ArrayList<MongoClientConnectionConfig>();
 		getConnectionConfigReaderList().forEach(connectionConfigReader -> {
 			var readConnectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
 			if (!CollectionUtils.isEmpty(readConnectionConfigList)) {

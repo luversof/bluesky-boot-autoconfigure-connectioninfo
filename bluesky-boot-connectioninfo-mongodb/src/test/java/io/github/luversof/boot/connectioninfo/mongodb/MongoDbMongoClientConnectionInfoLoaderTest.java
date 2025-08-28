@@ -31,7 +31,7 @@ class MongoDbMongoClientConnectionInfoLoaderTest {
 		
 		MongoDbMongoClientConnectionConfigReader connectionConfigReader = new MongoDbMongoClientConnectionConfigReader(connectionConfigProperties);
 		
-		var mongoDbMongoClientConnectionInfoLoader = new MongoDbMongoClientConnectionInfoLoader<>(connectionInfoProperties, List.of(connectionConfigReader));
+		var mongoDbMongoClientConnectionInfoLoader = new MongoDbMongoClientConnectionInfoLoader(connectionInfoProperties, List.of(connectionConfigReader));
 		mongoDbMongoClientConnectionInfoLoader.load();
 		log.debug("Test :");
 	}

@@ -10,10 +10,14 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoKey;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
+import lombok.Getter;
 
-public abstract class AbstractHikariDataSourceConnectionInfoLoader<C extends DataSourceConnectionConfig> extends AbstractDataSourceConnectionInfoLoader<HikariDataSource, C>{
+public class HikariDataSourceConnectionInfoLoader extends AbstractDataSourceConnectionInfoLoader<HikariDataSource, DataSourceConnectionConfig> {
 
-	protected AbstractHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
+	@Getter
+	protected String loaderKey = "hikaridatasource";
+
+	public HikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<DataSourceConnectionConfig>> connectionConfigReaderList) {
 		super(connectionInfoProperties, connectionConfigReaderList);
 	}
 
