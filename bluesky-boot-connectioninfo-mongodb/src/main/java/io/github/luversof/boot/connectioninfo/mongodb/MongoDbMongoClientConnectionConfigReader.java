@@ -13,7 +13,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
 
-public class MongoDbMongoClientConnectionConfigReader implements ConnectionConfigReader<MongoDbMongoClientConnectionConfig>{
+public class MongoDbMongoClientConnectionConfigReader implements ConnectionConfigReader<MongoClientConnectionConfig>{
 
 	@Getter
 	protected String readerKey = "mongodb-mongoclient";
@@ -25,12 +25,12 @@ public class MongoDbMongoClientConnectionConfigReader implements ConnectionConfi
 	}
 
 	@Override
-	public List<MongoDbMongoClientConnectionConfig> readConnectionConfigList(List<String> connectionList) {
+	public List<MongoClientConnectionConfig> readConnectionConfigList(List<String> connectionList) {
 		try(var loaderMongoClient = getLoaderMongoClient()) {
 			var mongoDatabase = loaderMongoClient.getDatabase(getConfigProperties("database"));
-			var mongoCollection = mongoDatabase.getCollection("ConnectionConfig");
+			var mongoCollection = mongoDatabase.getCollection("MongoClientConnectionConfig");
 			var query = new Document("connection", new Document("$in", connectionList));
-			var mongoDbMongoClientConnectionConfigList = mongoCollection.find(query, MongoDbMongoClientConnectionConfig.class);
+			var mongoDbMongoClientConnectionConfigList = mongoCollection.find(query, MongoClientConnectionConfig.class);
 			return mongoDbMongoClientConnectionConfigList.into(new ArrayList<>());
 		}
 	}

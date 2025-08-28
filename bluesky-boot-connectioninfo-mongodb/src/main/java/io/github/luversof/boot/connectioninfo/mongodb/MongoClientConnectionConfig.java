@@ -4,7 +4,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionConfig;
 import lombok.Data;
 
 @Data
-public class MongoDbMongoClientConnectionConfig implements ConnectionConfig {
+public class MongoClientConnectionConfig implements ConnectionConfig {
 
 	private String connection;
 	

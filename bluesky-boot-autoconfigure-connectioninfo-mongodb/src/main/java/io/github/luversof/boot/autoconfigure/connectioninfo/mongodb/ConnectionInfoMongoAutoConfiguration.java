@@ -18,7 +18,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
-import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionConfig;
+import io.github.luversof.boot.connectioninfo.mongodb.MongoClientConnectionConfig;
 import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionInfoLoader;
 
@@ -40,12 +40,12 @@ public class ConnectionInfoMongoAutoConfiguration {
 	
 	@Bean
 	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "mongo-mongoclient.enabled", havingValue = "true")
-	<C extends MongoDbMongoClientConnectionConfig> MongoDbMongoClientConnectionInfoLoader<C> mongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
+	<C extends MongoClientConnectionConfig> MongoDbMongoClientConnectionInfoLoader<C> mongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
 		return new MongoDbMongoClientConnectionInfoLoader<>(connectionInfoProperties, connectionConfigReaderList);
 	}
 
 	@Bean
-	ConnectionInfoRegistry<MongoClient> mongoClientConnectionInfoRegistry(List<ConnectionInfoLoader<MongoClient, MongoDbMongoClientConnectionConfig>> connectionInfoLoaderList) {
+	ConnectionInfoRegistry<MongoClient> mongoClientConnectionInfoRegistry(List<ConnectionInfoLoader<MongoClient, MongoClientConnectionConfig>> connectionInfoLoaderList) {
 		var connectionInfoList = new ArrayList<ConnectionInfo<MongoClient>>();
 		connectionInfoLoaderList.forEach(connectionInfoLoader -> connectionInfoList.addAll(connectionInfoLoader.load()));
 		return () -> connectionInfoList;

@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class MongoDbMongoClientConnectionInfoLoader<C extends MongoDbMongoClientConnectionConfig> implements ConnectionInfoLoader<MongoClient, C> {
+public class MongoDbMongoClientConnectionInfoLoader<C extends MongoClientConnectionConfig> implements ConnectionInfoLoader<MongoClient, C> {
 	
 
 	@Getter
@@ -92,7 +92,7 @@ public class MongoDbMongoClientConnectionInfoLoader<C extends MongoDbMongoClient
 		return connectionInfoList;
 	}
 	
-	private ConnectionInfo<MongoClient> createConnectionInfo(MongoDbMongoClientConnectionConfig connectionConfig) {
+	private ConnectionInfo<MongoClient> createConnectionInfo(MongoClientConnectionConfig connectionConfig) {
 		MongoClientSettings.builder()
 			.applyConnectionString(new ConnectionString(connectionConfig.getConnectionString()))
 			// adjust database
