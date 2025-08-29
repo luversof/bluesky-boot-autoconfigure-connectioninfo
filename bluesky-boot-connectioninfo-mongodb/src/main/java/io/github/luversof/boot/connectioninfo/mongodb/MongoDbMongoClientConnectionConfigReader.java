@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
@@ -37,7 +40,18 @@ public class MongoDbMongoClientConnectionConfigReader implements ConnectionConfi
 	}
 
 	private MongoClient getLoaderMongoClient() {
-		return MongoClients.create(getConfigProperties("connectionString"));
+		var pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+		var pojoCodecRegistry = CodecRegistries.fromRegistries(
+			MongoClientSettings.getDefaultCodecRegistry(),
+			CodecRegistries.fromProviders(pojoCodecProvider)
+		);
+		
+		var settings = MongoClientSettings.builder()
+			.applyConnectionString(new com.mongodb.ConnectionString(getConfigProperties("connectionString")))
+			.codecRegistry(pojoCodecRegistry)
+			.build();
+			
+		return MongoClients.create(settings);
 	}
 	
 	private String getConfigProperties(String key) {

@@ -25,7 +25,7 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 	
 
 	@Getter
-	protected String loaderKey = "mongodb-mongoclient";
+	protected String loaderKey = "mongoclient";
 	
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
@@ -74,7 +74,6 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		
 
 		connectionList.forEach(connection -> {
-			
 			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.getConnection().equalsIgnoreCase(connection))) {
 				log.debug("find database connection ({})", connection);
 			} else {

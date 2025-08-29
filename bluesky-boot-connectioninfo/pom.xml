@@ -30,6 +30,13 @@
 		</dependency>
 		<!-- (e) sevlet web-->
 		
+		
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>bson</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
 		<!-- (s) test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

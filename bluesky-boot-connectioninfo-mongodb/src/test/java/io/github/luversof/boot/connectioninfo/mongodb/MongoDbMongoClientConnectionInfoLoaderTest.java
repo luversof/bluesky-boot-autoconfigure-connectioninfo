@@ -27,7 +27,7 @@ class MongoDbMongoClientConnectionInfoLoaderTest {
 		connectionInfoLoaderProperties.setConnections(Map.of("connExample", List.of("test1", "test2")));
 		
 		var connectionInfoProperties = new ConnectionInfoProperties();
-		connectionInfoProperties.getLoaders().put("mongodb-mongoclient", connectionInfoLoaderProperties);
+		connectionInfoProperties.getLoaders().put("mongoclient", connectionInfoLoaderProperties);
 		
 		MongoDbMongoClientConnectionConfigReader connectionConfigReader = new MongoDbMongoClientConnectionConfigReader(connectionConfigProperties);
 		
