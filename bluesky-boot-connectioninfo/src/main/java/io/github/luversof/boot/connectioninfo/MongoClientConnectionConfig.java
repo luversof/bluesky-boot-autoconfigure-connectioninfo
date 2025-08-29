@@ -1,6 +1,5 @@
-package io.github.luversof.boot.connectioninfo.mongodb;
+package io.github.luversof.boot.connectioninfo;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfig;
 import lombok.Data;
 
 @Data

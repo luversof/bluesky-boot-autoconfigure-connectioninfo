@@ -24,7 +24,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
-import io.github.luversof.boot.connectioninfo.jdbc.DataSourceConnectionConfig;
+import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.connectioninfo.jdbc.HikariDataSourceConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.jdbc.MariaDbDataSourceConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.jdbc.PostgreSQLDataSourceConnectionConfigReader;

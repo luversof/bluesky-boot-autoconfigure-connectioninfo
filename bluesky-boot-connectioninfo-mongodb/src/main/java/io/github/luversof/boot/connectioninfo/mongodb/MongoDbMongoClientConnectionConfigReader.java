@@ -10,6 +10,7 @@ import com.mongodb.client.MongoClients;
 
 import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
+import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
 

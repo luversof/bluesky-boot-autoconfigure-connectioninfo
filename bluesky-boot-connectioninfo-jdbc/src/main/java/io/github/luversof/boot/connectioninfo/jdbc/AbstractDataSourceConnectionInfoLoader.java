@@ -12,6 +12,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
+import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

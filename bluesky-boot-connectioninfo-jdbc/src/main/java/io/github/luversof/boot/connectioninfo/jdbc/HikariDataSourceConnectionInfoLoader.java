@@ -9,6 +9,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoKey;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
+import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
 

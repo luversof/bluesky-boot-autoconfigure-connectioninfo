@@ -18,7 +18,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
-import io.github.luversof.boot.connectioninfo.mongodb.MongoClientConnectionConfig;
+import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
 import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionInfoLoader;
 

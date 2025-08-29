@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
+import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
 

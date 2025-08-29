@@ -1,8 +1,7 @@
-package io.github.luversof.boot.connectioninfo.jdbc;
+package io.github.luversof.boot.connectioninfo;
 
 import java.util.Map;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfig;
 import lombok.Data;
 
 @Data

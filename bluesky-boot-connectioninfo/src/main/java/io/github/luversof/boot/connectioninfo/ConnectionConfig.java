@@ -1,7 +1,7 @@
 package io.github.luversof.boot.connectioninfo;
 
 /**
- * connection 정보를 담은 객체
+ * Connection Configuration Interface
  */
 public interface ConnectionConfig {
 	

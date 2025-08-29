@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 
 import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
+import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import lombok.Getter;
 
 public class SQLServerDataSourceConnectionConfigReader extends AbstractDataSourceConnectionConfigReader<DataSourceConnectionConfig> {
