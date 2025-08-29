@@ -20,7 +20,7 @@
 
 ```xml
 <dependency>
-  <groupId>kr.bluesky.boot</groupId>
+  <groupId>io.github.luversof</groupId>
   <artifactId>bluesky-boot-autoconfigure-connectioninfo</artifactId>
 </dependency>
 ```
