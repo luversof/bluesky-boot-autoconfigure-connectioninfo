@@ -52,6 +52,8 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 	@Override
 	public List<ConnectionInfo<T>> load(List<String> connectionList) {
 		
+		log.debug("connectionConfigReaderKeyList : {}", getConnectionConfigReaderList().stream().map(reader -> reader.getReaderKey()).toList());
+		
 		var connectionConfigList = new ArrayList<C>();
 		getConnectionConfigReaderList().forEach(connectionConfigReader -> {
 			var readConnectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
