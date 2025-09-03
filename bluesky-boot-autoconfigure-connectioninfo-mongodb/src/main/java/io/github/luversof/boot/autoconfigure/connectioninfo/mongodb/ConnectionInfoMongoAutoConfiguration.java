@@ -12,14 +12,13 @@ import org.springframework.context.annotation.Bean;
 import com.mongodb.client.MongoClient;
 
 import io.github.luversof.boot.autoconfigure.connectioninfo.ConnectionInfoAutoConfiguration;
-import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
-import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
 import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
-import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionConfigReader;
+import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionInfoLoader;
 
 @AutoConfiguration(
@@ -33,14 +32,14 @@ import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnecti
 public class ConnectionInfoMongoAutoConfiguration {
 
 	@Bean
-	@ConditionalOnProperty(prefix = "bluesky-boot.connection-config.readers", name = "mongo-mongoclient.enabled", havingValue = "true")
-	MongoDbMongoClientConnectionConfigReader mongoDbMongoClientConnectionConfigReader(ConnectionConfigProperties connectionConfigProperties) {
-		return new MongoDbMongoClientConnectionConfigReader(connectionConfigProperties);
+	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "mongo-mongoclient.enabled", havingValue = "true")
+	MongoDbMongoClientConnectionInfoReader mongoDbMongoClientConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
+		return new MongoDbMongoClientConnectionInfoReader(connectionInfoProperties);
 	}
 	
 	@Bean
 	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "mongo-mongoclient.enabled", havingValue = "true")
-	MongoDbMongoClientConnectionInfoLoader mongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<MongoClientConnectionConfig>> connectionConfigReaderList) {
+	MongoDbMongoClientConnectionInfoLoader mongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionConfigReaderList) {
 		return new MongoDbMongoClientConnectionInfoLoader(connectionInfoProperties, connectionConfigReaderList);
 	}
 

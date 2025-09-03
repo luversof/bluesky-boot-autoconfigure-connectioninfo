@@ -15,10 +15,32 @@ import lombok.NoArgsConstructor;
 @ConfigurationProperties(prefix = "bluesky-boot.connection-info")
 public class ConnectionInfoProperties {
 	
+	private Map<String, ConnectionInfoReaderProperties> readers = new HashMap<>();
+	
 	/**
 	 * Manage loader information for each loader and a list of connection targets to be called through the loader.
 	 */
 	private Map<String, ConnectionInfoLoaderProperties> loaders = new HashMap<>();
+	
+	
+	@Data
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ConnectionInfoReaderProperties {
+		
+		/**
+		 * Whether to use this Loader or not
+		 */
+		private boolean enabled;
+		
+		/**
+		 * Manage loader call information
+		 * Currently used in an informal form.
+		 */
+		private Map<String, String> properties;
+		
+	}
 
 	
 	@Data
@@ -37,4 +59,8 @@ public class ConnectionInfoProperties {
 		 */
 		private Map<String, List<String>> connections;
 	}
+	
+
+	
+
 }

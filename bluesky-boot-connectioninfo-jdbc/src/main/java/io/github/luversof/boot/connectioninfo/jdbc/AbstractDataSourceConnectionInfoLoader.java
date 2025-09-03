@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import org.springframework.util.CollectionUtils;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
@@ -28,9 +28,9 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected final List<ConnectionConfigReader<C>> connectionConfigReaderList;
+	protected final List<ConnectionInfoReader<C>> connectionConfigReaderList;
 	
-	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<C>> connectionConfigReaderList) {
+	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<C>> connectionConfigReaderList) {
 		this.connectionInfoProperties= connectionInfoProperties;
 		this.connectionConfigReaderList = connectionConfigReaderList;
 	}

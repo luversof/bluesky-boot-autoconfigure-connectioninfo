@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoDevCheckController;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
@@ -19,10 +18,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
  *
  */
 @AutoConfiguration("blueskyBootConnectionInfoAutoConfiguration")
-@EnableConfigurationProperties({
-	ConnectionConfigProperties.class,
-	ConnectionInfoProperties.class
-})
+@EnableConfigurationProperties(ConnectionInfoProperties.class)
 @ConditionalOnProperty(prefix = "bluesky-boot.connection-info", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ConnectionInfoAutoConfiguration {
 	

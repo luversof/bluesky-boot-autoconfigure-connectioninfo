@@ -11,21 +11,21 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
-import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
 
-public class MongoDbMongoClientConnectionConfigReader implements ConnectionConfigReader<MongoClientConnectionConfig>{
+public class MongoDbMongoClientConnectionInfoReader implements ConnectionInfoReader<MongoClientConnectionConfig>{
 
 	@Getter
 	protected String readerKey = "mongodb-mongoclient";
 	
-	protected final ConnectionConfigProperties connectionConfigProperties;
+	protected final ConnectionInfoProperties connectionInfoProperties;
 	
-	public MongoDbMongoClientConnectionConfigReader(ConnectionConfigProperties connectionConfigProperties) {
-		this.connectionConfigProperties = connectionConfigProperties;
+	public MongoDbMongoClientConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+		this.connectionInfoProperties = connectionInfoProperties;
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class MongoDbMongoClientConnectionConfigReader implements ConnectionConfi
 	
 	private String getConfigProperties(String key) {
 		var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
-		var loaderProperties = connectionConfigProperties.getReaders().get(getReaderKey()).getProperties();
+		var loaderProperties = connectionInfoProperties.getReaders().get(getReaderKey()).getProperties();
 		return encryptor.decrypt(loaderProperties.get(key));
 	}
 }

@@ -18,7 +18,7 @@ public interface ConnectionInfoLoader<T, C extends ConnectionConfig> {
 	 */
 	String getLoaderKey();
 	
-	List<ConnectionConfigReader<C>> getConnectionConfigReaderList();
+	List<ConnectionInfoReader<C>> getConnectionConfigReaderList();
 
 	/**
 	 * Method for handling load without parameters

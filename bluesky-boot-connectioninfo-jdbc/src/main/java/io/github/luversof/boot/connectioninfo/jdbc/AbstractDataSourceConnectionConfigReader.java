@@ -10,14 +10,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
 
 public abstract class AbstractDataSourceConnectionConfigReader<C extends DataSourceConnectionConfig> implements DataSourceConnectionConfigReader<C> {
 	
-	protected final ConnectionConfigProperties connectionConfigProperties;
+	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
 	protected String loaderQuery = """
@@ -26,8 +26,8 @@ public abstract class AbstractDataSourceConnectionConfigReader<C extends DataSou
 		WHERE connection IN ({0})
 		""";
 	
-	protected AbstractDataSourceConnectionConfigReader(ConnectionConfigProperties connectionConfigProperties) {
-		this.connectionConfigProperties = connectionConfigProperties;
+	protected AbstractDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
+		this.connectionInfoProperties = connectionInfoProperties;
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public abstract class AbstractDataSourceConnectionConfigReader<C extends DataSou
 	private JdbcTemplate getJdbcTemplate() {
 		var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
 		
-		var readerProperties = connectionConfigProperties.getReaders().get(getReaderKey()).getProperties();
+		var readerProperties = connectionInfoProperties.getReaders().get(getReaderKey()).getProperties();
 		String url = readerProperties.get("url");
 		String username = encryptor.decrypt(readerProperties.get("username"));
 		String password = encryptor.decrypt(readerProperties.get("password"));

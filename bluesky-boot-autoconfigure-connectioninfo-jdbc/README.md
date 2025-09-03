@@ -185,7 +185,7 @@ public class CustomDatabaseConnectionConfigReader
     @Getter 
     protected Driver readerDriver = new com.custom.jdbc.Driver();
     
-    public CustomDatabaseConnectionConfigReader(ConnectionConfigProperties properties) {
+    public CustomDatabaseConnectionConfigReader(ConnectionInfoProperties properties) {
         super(properties);
     }
     

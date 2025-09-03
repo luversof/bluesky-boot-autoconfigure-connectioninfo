@@ -5,7 +5,7 @@ import java.util.List;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoKey;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
@@ -18,7 +18,7 @@ public class HikariDataSourceConnectionInfoLoader extends AbstractDataSourceConn
 	@Getter
 	protected String loaderKey = "hikaridatasource";
 
-	public HikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<DataSourceConnectionConfig>> connectionConfigReaderList) {
+	public HikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<DataSourceConnectionConfig>> connectionConfigReaderList) {
 		super(connectionInfoProperties, connectionConfigReaderList);
 	}
 

@@ -11,7 +11,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfigReader;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoKey;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
@@ -30,9 +30,9 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected final List<ConnectionConfigReader<MongoClientConnectionConfig>> connectionConfigReaderList;
+	protected final List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionConfigReaderList;
 	
-	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionConfigReader<MongoClientConnectionConfig>> connectionConfigReaderList) {
+	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionConfigReaderList) {
 		this.connectionInfoProperties = connectionInfoProperties;
 		this.connectionConfigReaderList = connectionConfigReaderList;
 	}

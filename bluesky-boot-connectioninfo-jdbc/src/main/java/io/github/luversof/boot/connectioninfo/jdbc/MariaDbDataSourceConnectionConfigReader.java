@@ -5,7 +5,7 @@ import java.sql.Driver;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 
-import io.github.luversof.boot.connectioninfo.ConnectionConfigProperties;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import lombok.Getter;
 
@@ -17,8 +17,8 @@ public class MariaDbDataSourceConnectionConfigReader extends AbstractDataSourceC
 	@Getter
 	protected Driver readerDriver = new org.mariadb.jdbc.Driver();
 	
-	public MariaDbDataSourceConnectionConfigReader(ConnectionConfigProperties connectionConfigProperties) {
-		super(connectionConfigProperties);
+	public MariaDbDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
+		super(connectionInfoProperties);
 	}
 
 	@Override
