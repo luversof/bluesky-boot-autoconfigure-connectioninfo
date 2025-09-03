@@ -20,7 +20,7 @@ public abstract class AbstractDataSourceConnectionInfoReader<C extends DataSourc
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected String loaderQuery = """
+	protected String readerQuery = """
 		SELECT connection, url, username, password, extradata 
 		FROM DataSourceConnectionConfig
 		WHERE connection IN ({0})
@@ -39,7 +39,7 @@ public abstract class AbstractDataSourceConnectionInfoReader<C extends DataSourc
 
 	@Override
 	public List<C> readConnectionConfigList(List<String> connectionList) {
-		String sql = MessageFormat.format(getLoaderQuery(), String.join(",", Collections.nCopies(connectionList.size(), "?")));
+		String sql = MessageFormat.format(getReaderQuery(), String.join(",", Collections.nCopies(connectionList.size(), "?")));
 		return getJdbcTemplate().query(sql, new ArgumentPreparedStatementSetter(connectionList.toArray()), getConnectionConfigRowMapper());
 	}
 	
