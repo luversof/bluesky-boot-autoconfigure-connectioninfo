@@ -9,18 +9,18 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import lombok.Getter;
 
-public class MariaDbDataSourceConnectionConfigReader extends AbstractDataSourceConnectionConfigReader<DataSourceConnectionConfig> {
+public class SQLServerDataSourceConnectionInfoReader extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
+
+	@Getter
+	protected String readerKey = "sqlserver-datasource";
 	
 	@Getter
-	protected String readerKey = "mariadb-datasource";
+	protected Driver readerDriver = new com.microsoft.sqlserver.jdbc.SQLServerDriver();
 	
-	@Getter
-	protected Driver readerDriver = new org.mariadb.jdbc.Driver();
-	
-	public MariaDbDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
+	public SQLServerDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		super(connectionInfoProperties);
 	}
-
+	
 	@Override
 	protected RowMapper<DataSourceConnectionConfig> getConnectionConfigRowMapper() {
 		return new DataClassRowMapper<>(DataSourceConnectionConfig.class);

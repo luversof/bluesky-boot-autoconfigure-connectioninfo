@@ -26,9 +26,9 @@ class MongoDbMongoClientConnectionInfoLoaderTest {
 		connectionInfoProperties.getReaders().put("mongodb-mongoclient", connectionInfoReaderProperties);
 		connectionInfoProperties.getLoaders().put("mongoclient", connectionInfoLoaderProperties);
 		
-		MongoDbMongoClientConnectionInfoReader connectionConfigReader = new MongoDbMongoClientConnectionInfoReader(connectionInfoProperties);
+		MongoDbMongoClientConnectionInfoReader connectionInfoReader = new MongoDbMongoClientConnectionInfoReader(connectionInfoProperties);
 		
-		var mongoDbMongoClientConnectionInfoLoader = new MongoDbMongoClientConnectionInfoLoader(connectionInfoProperties, List.of(connectionConfigReader));
+		var mongoDbMongoClientConnectionInfoLoader = new MongoDbMongoClientConnectionInfoLoader(connectionInfoProperties, List.of(connectionInfoReader));
 		mongoDbMongoClientConnectionInfoLoader.load();
 		log.debug("Test :");
 	}

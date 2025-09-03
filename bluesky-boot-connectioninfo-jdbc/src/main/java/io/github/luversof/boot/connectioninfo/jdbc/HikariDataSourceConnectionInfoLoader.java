@@ -18,8 +18,8 @@ public class HikariDataSourceConnectionInfoLoader extends AbstractDataSourceConn
 	@Getter
 	protected String loaderKey = "hikaridatasource";
 
-	public HikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<DataSourceConnectionConfig>> connectionConfigReaderList) {
-		super(connectionInfoProperties, connectionConfigReaderList);
+	public HikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<DataSourceConnectionConfig>> connectionInfoReaderList) {
+		super(connectionInfoProperties, connectionInfoReaderList);
 	}
 
 	@Override

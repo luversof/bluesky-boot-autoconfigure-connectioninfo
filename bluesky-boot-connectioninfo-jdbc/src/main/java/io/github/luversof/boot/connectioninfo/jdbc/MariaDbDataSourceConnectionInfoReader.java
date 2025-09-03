@@ -9,15 +9,15 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import lombok.Getter;
 
-public class PostgreSQLDataSourceConnectionConfigReader extends AbstractDataSourceConnectionConfigReader<DataSourceConnectionConfig> {
+public class MariaDbDataSourceConnectionInfoReader extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
 	
 	@Getter
-	protected String readerKey = "postgresql-datasource";
+	protected String readerKey = "mariadb-datasource";
 	
 	@Getter
-	protected Driver readerDriver = new org.postgresql.Driver();
+	protected Driver readerDriver = new org.mariadb.jdbc.Driver();
 	
-	public PostgreSQLDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
+	public MariaDbDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		super(connectionInfoProperties);
 	}
 

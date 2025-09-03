@@ -15,7 +15,7 @@ import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.Getter;
 
-public abstract class AbstractDataSourceConnectionConfigReader<C extends DataSourceConnectionConfig> implements DataSourceConnectionConfigReader<C> {
+public abstract class AbstractDataSourceConnectionInfoReader<C extends DataSourceConnectionConfig> implements DataSourceConnectionInfoReader<C> {
 	
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
@@ -26,7 +26,7 @@ public abstract class AbstractDataSourceConnectionConfigReader<C extends DataSou
 		WHERE connection IN ({0})
 		""";
 	
-	protected AbstractDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
+	protected AbstractDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		this.connectionInfoProperties = connectionInfoProperties;
 	}
 	

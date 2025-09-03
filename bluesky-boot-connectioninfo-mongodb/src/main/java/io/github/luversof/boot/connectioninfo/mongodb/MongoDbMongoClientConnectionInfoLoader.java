@@ -30,11 +30,11 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected final List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionConfigReaderList;
+	protected final List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList;
 	
-	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionConfigReaderList) {
+	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList) {
 		this.connectionInfoProperties = connectionInfoProperties;
-		this.connectionConfigReaderList = connectionConfigReaderList;
+		this.connectionInfoReaderList = connectionInfoReaderList;
 	}
 
 	@Override
@@ -58,14 +58,14 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		}
 		
 		
-		var connectionConfigReaderList = getConnectionConfigReaderList();
+		var connectionInfoReaderList = getConnectionInfoReaderList();
 		
-		if (connectionConfigReaderList == null || connectionConfigReaderList.isEmpty()) {
+		if (connectionInfoReaderList == null || connectionInfoReaderList.isEmpty()) {
 			return Collections.emptyList();
 		}
 		
 		var connectionConfigList = new ArrayList<MongoClientConnectionConfig>();
-		getConnectionConfigReaderList().forEach(connectionConfigReader -> {
+		getConnectionInfoReaderList().forEach(connectionConfigReader -> {
 			var readConnectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
 			if (!CollectionUtils.isEmpty(readConnectionConfigList)) {
 				connectionConfigList.addAll(readConnectionConfigList);

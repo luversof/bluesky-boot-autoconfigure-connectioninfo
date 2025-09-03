@@ -25,9 +25,9 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.connectioninfo.jdbc.HikariDataSourceConnectionInfoLoader;
-import io.github.luversof.boot.connectioninfo.jdbc.MariaDbDataSourceConnectionConfigReader;
-import io.github.luversof.boot.connectioninfo.jdbc.PostgreSQLDataSourceConnectionConfigReader;
-import io.github.luversof.boot.connectioninfo.jdbc.SQLServerDataSourceConnectionConfigReader;
+import io.github.luversof.boot.connectioninfo.jdbc.MariaDbDataSourceConnectionInfoReader;
+import io.github.luversof.boot.connectioninfo.jdbc.PostgreSQLDataSourceConnectionInfoReader;
+import io.github.luversof.boot.connectioninfo.jdbc.SQLServerDataSourceConnectionInfoReader;
 
 @AutoConfiguration(
 	value = "blueskyBootConnectionInfoJdbcAutoConfiguration", 
@@ -45,8 +45,8 @@ public class ConnectionInfoJdbcAutoConfiguration {
 		
 		@Bean
 		@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "mariadb-datasource.enabled", havingValue = "true")
-		MariaDbDataSourceConnectionConfigReader mariaDbDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
-			return new MariaDbDataSourceConnectionConfigReader(connectionInfoProperties);
+		MariaDbDataSourceConnectionInfoReader mariaDbDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+			return new MariaDbDataSourceConnectionInfoReader(connectionInfoProperties);
 		}
 		
 	}
@@ -57,8 +57,8 @@ public class ConnectionInfoJdbcAutoConfiguration {
 		
 		@Bean
 		@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "sqlserver-datasource.enabled", havingValue = "true")
-		SQLServerDataSourceConnectionConfigReader sqlServerDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
-			return new SQLServerDataSourceConnectionConfigReader(connectionInfoProperties);
+		SQLServerDataSourceConnectionInfoReader sqlServerDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+			return new SQLServerDataSourceConnectionInfoReader(connectionInfoProperties);
 		}
 	}
 	
@@ -68,16 +68,16 @@ public class ConnectionInfoJdbcAutoConfiguration {
 		
 		@Bean
 		@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "postgresql-datasource.enabled", havingValue = "true")
-		PostgreSQLDataSourceConnectionConfigReader postgreSQLDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
-			return new PostgreSQLDataSourceConnectionConfigReader(connectionInfoProperties);
+		PostgreSQLDataSourceConnectionInfoReader postgreSQLDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+			return new PostgreSQLDataSourceConnectionInfoReader(connectionInfoProperties);
 		}
 		
 	}
 	
 	@Bean
 	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "hikaridatasource.enabled", havingValue = "true")
-	HikariDataSourceConnectionInfoLoader hikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<DataSourceConnectionConfig>> connectionConfigReaderList) {
-		return new HikariDataSourceConnectionInfoLoader(connectionInfoProperties, connectionConfigReaderList);
+	HikariDataSourceConnectionInfoLoader hikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<DataSourceConnectionConfig>> connectionInfoReaderList) {
+		return new HikariDataSourceConnectionInfoLoader(connectionInfoProperties, connectionInfoReaderList);
 	}
 	
 	@Bean

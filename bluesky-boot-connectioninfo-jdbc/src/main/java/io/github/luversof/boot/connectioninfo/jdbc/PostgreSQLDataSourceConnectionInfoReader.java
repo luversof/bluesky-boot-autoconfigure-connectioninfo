@@ -9,18 +9,18 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import lombok.Getter;
 
-public class SQLServerDataSourceConnectionConfigReader extends AbstractDataSourceConnectionConfigReader<DataSourceConnectionConfig> {
-
-	@Getter
-	protected String readerKey = "sqlserver-datasource";
+public class PostgreSQLDataSourceConnectionInfoReader extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
 	
 	@Getter
-	protected Driver readerDriver = new com.microsoft.sqlserver.jdbc.SQLServerDriver();
+	protected String readerKey = "postgresql-datasource";
 	
-	public SQLServerDataSourceConnectionConfigReader(ConnectionInfoProperties connectionInfoProperties) {
+	@Getter
+	protected Driver readerDriver = new org.postgresql.Driver();
+	
+	public PostgreSQLDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		super(connectionInfoProperties);
 	}
-	
+
 	@Override
 	protected RowMapper<DataSourceConnectionConfig> getConnectionConfigRowMapper() {
 		return new DataClassRowMapper<>(DataSourceConnectionConfig.class);

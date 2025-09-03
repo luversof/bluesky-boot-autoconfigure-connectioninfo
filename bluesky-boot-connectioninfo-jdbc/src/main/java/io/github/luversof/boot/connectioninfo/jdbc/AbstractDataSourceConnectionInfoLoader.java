@@ -28,11 +28,11 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	@Getter
-	protected final List<ConnectionInfoReader<C>> connectionConfigReaderList;
+	protected final List<ConnectionInfoReader<C>> connectionInfoReaderList;
 	
-	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<C>> connectionConfigReaderList) {
+	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<C>> connectionInfoReaderList) {
 		this.connectionInfoProperties= connectionInfoProperties;
-		this.connectionConfigReaderList = connectionConfigReaderList;
+		this.connectionInfoReaderList = connectionInfoReaderList;
 	}
 
 	@Override
@@ -52,11 +52,11 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 	@Override
 	public List<ConnectionInfo<T>> load(List<String> connectionList) {
 		
-		log.debug("connectionConfigReaderKeyList : {}", getConnectionConfigReaderList().stream().map(reader -> reader.getReaderKey()).toList());
+		log.debug("connectionInfoReaderKeyList : {}", getConnectionInfoReaderList().stream().map(reader -> reader.getReaderKey()).toList());
 		
 		var connectionConfigList = new ArrayList<C>();
-		getConnectionConfigReaderList().forEach(connectionConfigReader -> {
-			var readConnectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
+		getConnectionInfoReaderList().forEach(connectionInfoReader -> {
+			var readConnectionConfigList = connectionInfoReader.readConnectionConfigList(connectionList);
 			if (!CollectionUtils.isEmpty(readConnectionConfigList)) {
 				connectionConfigList.addAll(readConnectionConfigList);
 			}
