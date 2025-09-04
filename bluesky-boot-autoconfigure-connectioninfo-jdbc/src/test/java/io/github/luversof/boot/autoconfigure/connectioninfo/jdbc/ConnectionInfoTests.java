@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.core.ResolvableType;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 import io.github.luversof.boot.autoconfigure.connectioninfo.ConnectionInfoAutoConfiguration;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
@@ -92,6 +95,16 @@ class ConnectionInfoTests {
 			
 			var connectionInfoRegistry = context.getBean(ConnectionInfoRegistry.class);
 			log.debug("connectionInfoRegistry : {}", connectionInfoRegistry.getConnectionInfoList());
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	void connectionInfoRegistryTest() {
+		this.contextRunner.run(context -> {
+			var type = ResolvableType.forClassWithGenerics(ConnectionInfoRegistry.class, HikariDataSource.class);
+			var beanProvider = context.getBeanProvider(type);
+			log.debug("connectionInfoRegistry connectionList : {}", ((ConnectionInfoRegistry<HikariDataSource>) beanProvider.orderedStream().toList().get(0)).getConnectionInfoList());
 		});
 	}
 }

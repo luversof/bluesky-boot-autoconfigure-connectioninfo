@@ -8,23 +8,20 @@ import org.springframework.jdbc.core.RowMapper;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import lombok.Getter;
+import lombok.SneakyThrows;
 
-public class PostgreSQLDataSourceConnectionInfoReader extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
-	
+public class MysqlDataSourceConnectionInfoReader extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
+
 	@Getter
-	protected String readerKey = "postgresql-datasource";
+	protected String readerKey = "mysql-datasource";
 	
-	@Getter
-	protected String readerQuery = """
-		SELECT connection, url, username, password, extradata 
-		FROM "DataSourceConnectionConfig"
-		WHERE connection IN ({0})
-		""";
+	@Override
+	@SneakyThrows
+	protected Driver getReaderDriver() {
+		return new com.mysql.jdbc.Driver();
+	}
 	
-	@Getter
-	protected Driver readerDriver = new org.postgresql.Driver();
-	
-	public PostgreSQLDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+	public MysqlDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		super(connectionInfoProperties);
 	}
 
@@ -32,5 +29,4 @@ public class PostgreSQLDataSourceConnectionInfoReader extends AbstractDataSource
 	protected RowMapper<DataSourceConnectionConfig> getConnectionConfigRowMapper() {
 		return new DataClassRowMapper<>(DataSourceConnectionConfig.class);
 	}
-
 }

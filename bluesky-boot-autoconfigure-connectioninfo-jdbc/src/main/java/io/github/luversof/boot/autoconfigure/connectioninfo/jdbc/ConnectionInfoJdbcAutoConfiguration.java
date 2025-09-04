@@ -26,6 +26,7 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.connectioninfo.jdbc.HikariDataSourceConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.jdbc.MariaDbDataSourceConnectionInfoReader;
+import io.github.luversof.boot.connectioninfo.jdbc.MysqlDataSourceConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.jdbc.PostgreSQLDataSourceConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.jdbc.SQLServerDataSourceConnectionInfoReader;
 
@@ -60,6 +61,18 @@ public class ConnectionInfoJdbcAutoConfiguration {
 		SQLServerDataSourceConnectionInfoReader sqlServerDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 			return new SQLServerDataSourceConnectionInfoReader(connectionInfoProperties);
 		}
+	}
+	
+	@Configuration(proxyBeanMethods = false)
+	@ConditionalOnClass({ DataSource.class, JdbcTemplate.class, HikariDataSource.class, com.mysql.jdbc.Driver.class })
+	static class MysqlDbDataSourceConnectionInfoConfiguration {
+		
+		@Bean
+		@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "mysql-datasource.enabled", havingValue = "true")
+		MysqlDataSourceConnectionInfoReader mysqlDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+			return new MysqlDataSourceConnectionInfoReader(connectionInfoProperties);
+		}
+		
 	}
 	
 	@Configuration(proxyBeanMethods = false)
