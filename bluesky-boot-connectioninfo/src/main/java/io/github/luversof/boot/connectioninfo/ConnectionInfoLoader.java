@@ -18,6 +18,11 @@ public interface ConnectionInfoLoader<T, C extends ConnectionConfig> {
 	 */
 	String getLoaderKey();
 	
+	/**
+	 * List of ConnectionInfoReaders to be used in Loader
+	 * 
+	 * @return List of ConnectionInfoReaders
+	 */
 	List<ConnectionInfoReader<C>> getConnectionInfoReaderList();
 
 	/**

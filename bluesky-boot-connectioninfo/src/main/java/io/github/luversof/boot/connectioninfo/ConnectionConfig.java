@@ -5,6 +5,10 @@ package io.github.luversof.boot.connectioninfo;
  */
 public interface ConnectionConfig {
 	
+	/**
+	 * connection 정보를 구분하기 위한 key
+	 * @return connection key
+	 */
 	String getConnection();
 
 }

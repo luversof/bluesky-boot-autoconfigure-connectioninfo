@@ -11,10 +11,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * ConnectionInfoProperties
+ */
 @Data
 @ConfigurationProperties(prefix = "bluesky-boot.connection-info")
 public class ConnectionInfoProperties {
 	
+	/**
+	 * Manage reader information for each reader.
+	 */
 	private Map<String, ConnectionInfoReaderProperties> readers = new HashMap<>();
 	
 	/**
@@ -22,7 +28,9 @@ public class ConnectionInfoProperties {
 	 */
 	private Map<String, ConnectionInfoLoaderProperties> loaders = new HashMap<>();
 	
-	
+	/**
+	 * Whether to use the devcheck controller or not
+	 */
 	@Data
 	@Builder
 	@NoArgsConstructor
@@ -42,7 +50,9 @@ public class ConnectionInfoProperties {
 		
 	}
 
-	
+	/**
+	 * ConnectionInfoLoaderProperties
+	 */
 	@Data
 	@Builder
 	@NoArgsConstructor
