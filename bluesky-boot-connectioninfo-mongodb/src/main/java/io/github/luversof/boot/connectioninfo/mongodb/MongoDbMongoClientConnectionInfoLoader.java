@@ -58,14 +58,12 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		}
 		
 		
-		var connectionInfoReaderList = getConnectionInfoReaderList();
-		
 		if (connectionInfoReaderList == null || connectionInfoReaderList.isEmpty()) {
 			return Collections.emptyList();
 		}
 		
 		var connectionConfigList = new ArrayList<MongoClientConnectionConfig>();
-		getConnectionInfoReaderList().forEach(connectionConfigReader -> {
+		connectionInfoReaderList.forEach(connectionConfigReader -> {
 			var readConnectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
 			if (!CollectionUtils.isEmpty(readConnectionConfigList)) {
 				connectionConfigList.addAll(readConnectionConfigList);
@@ -99,7 +97,7 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 			.build();
 		
 		var mongoClient = MongoClients.create(connectionConfig.getConnectionString());
-		return new ConnectionInfo<MongoClient>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.getConnection()), mongoClient);
+		return new ConnectionInfo<>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.getConnection()), mongoClient);
 	}
 
 }

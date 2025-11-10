@@ -40,6 +40,15 @@ public interface ConnectionInfoRegistry<T> {
 	 */
 	default ConnectionInfo<T> getConnectionInfo(ConnectionInfoKey connectionInfoKey) {
 		return getConnectionInfoList().stream().filter(connectionInfo -> connectionInfo.getKey().equals(connectionInfoKey)).findAny().orElseThrow(() -> new RuntimeException("NOT_EXIST_CONNECTIONINFO"));
-	}  
+	}
+	
+	/**
+	 * connectionKey에 해당하는 connectionInfo 객체 List를 반환
+	 * @param connectionKey
+	 * @return
+	 */
+	default List<ConnectionInfo<T>> getConnectionInfo(String connectionKey) {
+		return getConnectionInfoList().stream().filter(connectionInfo -> connectionInfo.getKey().connectionKey().equals(connectionKey)).toList();
+	}
 
 }
