@@ -48,7 +48,7 @@ public class ConnectionInfoMongoAutoConfiguration {
 	}
 	
 	@Bean
-	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "mongo-mongoclient.enabled", havingValue = "true")
+	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "mongoclient.enabled", havingValue = "true")
 	MongoDbMongoClientConnectionInfoLoader mongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList) {
 		return new MongoDbMongoClientConnectionInfoLoader(connectionInfoProperties, connectionInfoReaderList);
 	}
