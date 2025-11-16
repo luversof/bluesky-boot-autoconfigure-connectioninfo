@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 
 import com.mongodb.client.MongoClient;
 
@@ -20,19 +20,22 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
 import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
+import io.github.luversof.boot.connectioninfo.mongodb.MongoDbConnectionMapProperties;
+import io.github.luversof.boot.connectioninfo.mongodb.MongoDbDefaultProperties;
 import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.mongodb.PropertiesMongoClientConnectionInfoReader;
 
 @AutoConfiguration(
-		value = "blueskyBootConnectionInfoJdbcAutoConfiguration", 
+		value = "blueskyBootConnectionInfoMongoAutoConfiguration", 
 		before = {
 			MongoAutoConfiguration.class,
 			ConnectionInfoAutoConfiguration.class
 		}
 	)
 @ConditionalOnClass(MongoClient.class)
-@PropertySource("classpath:connectioninfo-mongodb-defaults.properties")
+@EnableConfigurationProperties({ MongoDbDefaultProperties.class, MongoDbConnectionMapProperties.class })
+@PropertySource("classpath:bluesky-boot-connectioninfo-mongodb-defaults.properties")
 public class ConnectionInfoMongoAutoConfiguration {
 
 	@Bean
@@ -43,8 +46,12 @@ public class ConnectionInfoMongoAutoConfiguration {
 	
 	@Bean
 	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "properties-mongoclient.enabled", havingValue = "true")
-	PropertiesMongoClientConnectionInfoReader propertiesMongoClientConnectionInfoReader(Environment environment, ConnectionInfoProperties connectionInfoProperties) {
-		return new PropertiesMongoClientConnectionInfoReader(environment, connectionInfoProperties);
+	PropertiesMongoClientConnectionInfoReader propertiesMongoClientConnectionInfoReader(
+			ConnectionInfoProperties connectionInfoProperties,
+			MongoDbDefaultProperties defaultProperties,
+			MongoDbConnectionMapProperties connectionMapProperties) {
+		return new PropertiesMongoClientConnectionInfoReader(connectionInfoProperties, defaultProperties,
+				connectionMapProperties);
 	}
 	
 	@Bean
@@ -54,8 +61,8 @@ public class ConnectionInfoMongoAutoConfiguration {
 	}
 
 	@Bean
-	ConnectionInfoRegistry<MongoClient> mongoClientConnectionInfoRegistry(List<ConnectionInfoLoader<MongoClient, MongoClientConnectionConfig>> connectionInfoLoaderList) {
-		var connectionInfoList = new ArrayList<ConnectionInfo<MongoClient>>();
+	<T extends MongoClient, C extends MongoClientConnectionConfig> ConnectionInfoRegistry<T> mongoClientConnectionInfoRegistry(List<ConnectionInfoLoader<T, C>> connectionInfoLoaderList) {
+		var connectionInfoList = new ArrayList<ConnectionInfo<T>>();
 		connectionInfoLoaderList.forEach(connectionInfoLoader -> connectionInfoList.addAll(connectionInfoLoader.load()));
 		return () -> connectionInfoList;
 	}

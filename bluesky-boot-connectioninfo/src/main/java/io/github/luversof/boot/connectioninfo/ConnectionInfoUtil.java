@@ -30,6 +30,11 @@ public class ConnectionInfoUtil {
 			}
 		}
 		
+		// Registry가 없으면 null 반환
+		if (targetRegistry == null) {
+			return null;
+		}
+		
 		// 없으면 Loader를 통해 LazyLoad를 시도
 		ObjectProvider<ConnectionInfoLoader<T, ?>> connectionInfoLoaderProvider = applicationContext.getBeanProvider(ResolvableType.forType(new ParameterizedTypeReference<ConnectionInfoLoader<T, ?>>() {}));
 		for (var loader : connectionInfoLoaderProvider) {
