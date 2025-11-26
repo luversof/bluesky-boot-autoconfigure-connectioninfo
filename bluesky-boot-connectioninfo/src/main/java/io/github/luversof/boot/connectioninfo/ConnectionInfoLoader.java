@@ -7,8 +7,9 @@ import java.util.List;
  * @author bluesky
  *
  * @param <T> Target type to load via Loader
+ * @param <C> ConnectionConfig type to be used
  */
-public interface ConnectionInfoLoader<T> {
+public interface ConnectionInfoLoader<T, C extends ConnectionConfig> {
 	
 	/**
 	 * Key to be used among the keys in the ConnectionInfoLoaderProperties loader map
@@ -16,6 +17,13 @@ public interface ConnectionInfoLoader<T> {
 	 * @return Target key of loader map
 	 */
 	String getLoaderKey();
+	
+	/**
+	 * List of ConnectionInfoReaders to be used in Loader
+	 * 
+	 * @return List of ConnectionInfoReaders
+	 */
+	List<ConnectionInfoReader<C>> getConnectionInfoReaderList();
 
 	/**
 	 * Method for handling load without parameters

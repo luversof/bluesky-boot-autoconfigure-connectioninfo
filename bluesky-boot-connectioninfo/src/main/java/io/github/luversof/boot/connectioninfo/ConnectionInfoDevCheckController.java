@@ -10,11 +10,20 @@ import io.github.luversof.boot.devcheck.annotation.DevCheckController;
 import io.github.luversof.boot.devcheck.annotation.DevCheckDescription;
 import lombok.AllArgsConstructor;
 
+/**
+ * ConnectionInfoDevCheckController
+ * 
+ * @author luversof
+ *
+ */
 @AllArgsConstructor
 @DevCheckController
 @RequestMapping(value = "/blueskyBoot/connectionInfo", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ConnectionInfoDevCheckController {
 	
+	/**
+	 * connectionInfoRegistryList
+	 */
 	private List<ConnectionInfoRegistry<?>> connectionInfoRegistryList;
 	
 	@DevCheckDescription("connectionInfoKeyList")

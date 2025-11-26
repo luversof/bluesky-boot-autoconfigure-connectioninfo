@@ -14,15 +14,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 import com.zaxxer.hikari.HikariDataSource;
 
 import io.github.luversof.boot.autoconfigure.connectioninfo.ConnectionInfoAutoConfiguration;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoRegistry;
-import io.github.luversof.boot.connectioninfo.jdbc.MariaDbHikariDataSourceConnectionInfoLoader;
-import io.github.luversof.boot.connectioninfo.jdbc.SQLServerHikariDataSourceConnectionInfoLoader;
+import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
+import io.github.luversof.boot.connectioninfo.jdbc.HikariDataSourceConnectionInfoLoader;
+import io.github.luversof.boot.connectioninfo.jdbc.MariaDbDataSourceConnectionInfoReader;
+import io.github.luversof.boot.connectioninfo.jdbc.MysqlDataSourceConnectionInfoReader;
+import io.github.luversof.boot.connectioninfo.jdbc.PostgreSQLDataSourceConnectionInfoReader;
+import io.github.luversof.boot.connectioninfo.jdbc.SQLServerDataSourceConnectionInfoReader;
 
 @AutoConfiguration(
 	value = "blueskyBootConnectionInfoJdbcAutoConfiguration", 
@@ -32,36 +38,64 @@ import io.github.luversof.boot.connectioninfo.jdbc.SQLServerHikariDataSourceConn
 	}
 )
 @ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class, HikariDataSource.class })
-@ConditionalOnProperty(prefix = "bluesky-boot.connection-info", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ConnectionInfoJdbcAutoConfiguration {
 
 	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnClass({ DataSource.class, JdbcTemplate.class, HikariDataSource.class, org.mariadb.jdbc.Driver.class })
-	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "mariadb-datasource.enabled", havingValue = "true")
 	static class MariaDbDataSourceConnectionInfoConfiguration {
 		
 		@Bean
-		MariaDbHikariDataSourceConnectionInfoLoader mariaDbHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties) {
-			return new MariaDbHikariDataSourceConnectionInfoLoader(connectionInfoProperties);
+		@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "mariadb-datasource.enabled", havingValue = "true")
+		MariaDbDataSourceConnectionInfoReader mariaDbDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+			return new MariaDbDataSourceConnectionInfoReader(connectionInfoProperties);
 		}
 		
 	}
 	
 	@Configuration(proxyBeanMethods = false)
-	@ConditionalOnClass({ DataSource.class, JdbcTemplate.class, HikariDataSource.class, org.mariadb.jdbc.Driver.class })
-	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "sqlserver-datasource.enabled", havingValue = "true")
+	@ConditionalOnClass({ DataSource.class, JdbcTemplate.class, HikariDataSource.class, SQLServerDriver.class })
 	static class SQLServerDataSourceConnectionInfoConfiguration {
 		
 		@Bean
-		SQLServerHikariDataSourceConnectionInfoLoader sqlServerHikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties) {
-			return new SQLServerHikariDataSourceConnectionInfoLoader(connectionInfoProperties);
+		@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "sqlserver-datasource.enabled", havingValue = "true")
+		SQLServerDataSourceConnectionInfoReader sqlServerDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+			return new SQLServerDataSourceConnectionInfoReader(connectionInfoProperties);
+		}
+	}
+	
+	@Configuration(proxyBeanMethods = false)
+	@ConditionalOnClass({ DataSource.class, JdbcTemplate.class, HikariDataSource.class, com.mysql.jdbc.Driver.class })
+	static class MysqlDbDataSourceConnectionInfoConfiguration {
+		
+		@Bean
+		@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "mysql-datasource.enabled", havingValue = "true")
+		MysqlDataSourceConnectionInfoReader mysqlDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+			return new MysqlDataSourceConnectionInfoReader(connectionInfoProperties);
+		}
+		
+	}
+	
+	@Configuration(proxyBeanMethods = false)
+	@ConditionalOnClass({ DataSource.class, JdbcTemplate.class, HikariDataSource.class, org.postgresql.Driver.class })
+	static class PostgreSQLDataSourceConnectionInfoConfiguration {
+		
+		@Bean
+		@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "postgresql-datasource.enabled", havingValue = "true")
+		PostgreSQLDataSourceConnectionInfoReader postgreSQLDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
+			return new PostgreSQLDataSourceConnectionInfoReader(connectionInfoProperties);
 		}
 		
 	}
 	
 	@Bean
-	ConnectionInfoRegistry<HikariDataSource> dataSourceConnectionInfoRegistry(List<ConnectionInfoLoader<HikariDataSource>> connectionInfoLoaderList) {
-		var connectionInfoList = new ArrayList<ConnectionInfo<HikariDataSource>>();
+	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "hikaridatasource.enabled", havingValue = "true")
+	HikariDataSourceConnectionInfoLoader hikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<DataSourceConnectionConfig>> connectionInfoReaderList) {
+		return new HikariDataSourceConnectionInfoLoader(connectionInfoProperties, connectionInfoReaderList);
+	}
+	
+	@Bean
+	<T extends HikariDataSource, C extends DataSourceConnectionConfig> ConnectionInfoRegistry<T> dataSourceConnectionInfoRegistry(List<ConnectionInfoLoader<T, C>> connectionInfoLoaderList) {
+		var connectionInfoList = new ArrayList<ConnectionInfo<T>>();
 		connectionInfoLoaderList.forEach(connectionInfoLoader -> connectionInfoList.addAll(connectionInfoLoader.load()));
 		return () -> connectionInfoList;
 	}
