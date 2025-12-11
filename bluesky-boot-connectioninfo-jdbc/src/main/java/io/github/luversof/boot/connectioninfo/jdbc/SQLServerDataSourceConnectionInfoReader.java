@@ -7,18 +7,25 @@ import org.springframework.jdbc.core.RowMapper;
 
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
-import lombok.Getter;
 
 public class SQLServerDataSourceConnectionInfoReader extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
 
-	@Getter
 	protected String readerKey = "sqlserver-datasource";
 	
-	@Getter
 	protected Driver readerDriver = new com.microsoft.sqlserver.jdbc.SQLServerDriver();
 	
 	public SQLServerDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		super(connectionInfoProperties);
+	}
+
+	@Override
+	public String getReaderKey() {
+		return readerKey;
+	}
+
+	@Override
+	public Driver getReaderDriver() {
+		return readerDriver;
 	}
 	
 	@Override

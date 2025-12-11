@@ -7,14 +7,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.ResolvableType;
 
-import lombok.Setter;
-import lombok.experimental.UtilityClass;
+public final class ConnectionInfoUtil {
 
-@UtilityClass
-public class ConnectionInfoUtil {
-
-	@Setter
 	private static ApplicationContext applicationContext;
+
+	private ConnectionInfoUtil() {
+	}
+
+	public static void setApplicationContext(ApplicationContext applicationContext) {
+		ConnectionInfoUtil.applicationContext = applicationContext;
+	}
 
 	public static <T> T getConnection(String connectionKey) {
 		// ConnectionInfoRegistry에서 기본 ConnectionInfo를 가져오고

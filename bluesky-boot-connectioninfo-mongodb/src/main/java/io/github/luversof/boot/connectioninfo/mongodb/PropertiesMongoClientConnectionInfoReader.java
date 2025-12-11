@@ -7,7 +7,6 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
-import lombok.Getter;
 
 /**
  * Properties 파일에서 MongoDB 연결 정보를 읽어오는 Reader
@@ -48,12 +47,12 @@ import lombok.Getter;
  * bluesky-boot.connection-info.mongodb.connection-map.{connectionName}.hosts=host1:port1,host2:port2
  * bluesky-boot.connection-info.mongodb.connection-map.{connectionName}.database=dbname
  * bluesky-boot.connection-info.mongodb.connection-map.{connectionName}.username={text}encryptedUser
+
  * bluesky-boot.connection-info.mongodb.connection-map.{connectionName}.password={text}encryptedPassword
  * </pre>
  */
 public class PropertiesMongoClientConnectionInfoReader implements ConnectionInfoReader<MongoClientConnectionConfig> {
 
-	@Getter
 	protected String readerKey = "properties-mongoclient";
 
 	protected final ConnectionInfoProperties connectionInfoProperties;
@@ -67,6 +66,11 @@ public class PropertiesMongoClientConnectionInfoReader implements ConnectionInfo
 		this.connectionInfoProperties = connectionInfoProperties;
 		this.defaultProperties = defaultProperties;
 		this.connectionMapProperties = connectionMapProperties;
+	}
+
+	@Override
+	public String getReaderKey() {
+		return readerKey;
 	}
 
 	@Override

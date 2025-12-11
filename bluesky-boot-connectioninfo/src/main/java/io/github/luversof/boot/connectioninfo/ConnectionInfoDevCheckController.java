@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import io.github.luversof.boot.devcheck.annotation.DevCheckController;
 import io.github.luversof.boot.devcheck.annotation.DevCheckDescription;
-import lombok.AllArgsConstructor;
 
 /**
  * ConnectionInfoDevCheckController
@@ -16,7 +15,6 @@ import lombok.AllArgsConstructor;
  * @author luversof
  *
  */
-@AllArgsConstructor
 @DevCheckController
 @RequestMapping(value = "/blueskyBoot/connectionInfo", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ConnectionInfoDevCheckController {
@@ -24,7 +22,11 @@ public class ConnectionInfoDevCheckController {
 	/**
 	 * connectionInfoRegistryList
 	 */
-	private List<ConnectionInfoRegistry<?>> connectionInfoRegistryList;
+	private final List<ConnectionInfoRegistry<?>> connectionInfoRegistryList;
+
+	public ConnectionInfoDevCheckController(List<ConnectionInfoRegistry<?>> connectionInfoRegistryList) {
+		this.connectionInfoRegistryList = connectionInfoRegistryList;
+	}
 	
 	@DevCheckDescription("connectionInfoKeyList")
 	@GetMapping("/connectionInfoKeyList")

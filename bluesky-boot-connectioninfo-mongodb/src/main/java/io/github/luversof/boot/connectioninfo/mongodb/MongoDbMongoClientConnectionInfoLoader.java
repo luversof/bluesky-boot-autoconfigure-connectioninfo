@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.mongodb.ConnectionString;
@@ -11,30 +13,35 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
-import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoKey;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoader<MongoClient, MongoClientConnectionConfig> {
 	
-
-	@Getter
+	private static final Logger log = LoggerFactory.getLogger(MongoDbMongoClientConnectionInfoLoader.class);
+	
 	protected String loaderKey = "mongoclient";
 	
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
-	@Getter
 	protected final List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList;
 	
 	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList) {
 		this.connectionInfoProperties = connectionInfoProperties;
 		this.connectionInfoReaderList = connectionInfoReaderList;
+	}
+
+	@Override
+	public String getLoaderKey() {
+		return loaderKey;
+	}
+
+	public List<ConnectionInfoReader<MongoClientConnectionConfig>> getConnectionInfoReaderList() {
+		return connectionInfoReaderList;
 	}
 
 	@Override

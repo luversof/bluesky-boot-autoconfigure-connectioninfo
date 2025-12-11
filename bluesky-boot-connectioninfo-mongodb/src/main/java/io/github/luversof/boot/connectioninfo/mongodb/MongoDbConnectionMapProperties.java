@@ -5,17 +5,12 @@ import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * MongoDB connection-map properties 바인딩
  * 
  * <p>
  * connection-info.mongodb.connection-map.{connectionName}.*
  */
-@Getter
-@Setter
 @ConfigurationProperties(prefix = "bluesky-boot.connection-info.mongodb")
 public class MongoDbConnectionMapProperties {
 
@@ -25,11 +20,17 @@ public class MongoDbConnectionMapProperties {
 	 */
 	private Map<String, MongoConnectionConfig> connectionMap = new HashMap<>();
 
+	public Map<String, MongoConnectionConfig> getConnectionMap() {
+		return connectionMap;
+	}
+
+	public void setConnectionMap(Map<String, MongoConnectionConfig> connectionMap) {
+		this.connectionMap = connectionMap;
+	}
+
 	/**
 	 * 개별 MongoDB 연결 설정 (필수 정보만)
 	 */
-	@Getter
-	@Setter
 	public static class MongoConnectionConfig {
 
 		/**
@@ -48,10 +49,44 @@ public class MongoDbConnectionMapProperties {
 		 * 사용자명 (암호화 가능: {text}encrypted...)
 		 */
 		private String username;
-
+		
 		/**
 		 * 비밀번호 (암호화 가능: {text}encrypted...)
 		 */
 		private String password;
+
+		public String getHosts() {
+			return hosts;
+		}
+
+		public void setHosts(String hosts) {
+			this.hosts = hosts;
+		}
+
+		public String getDatabase() {
+			return database;
+		}
+
+		public void setDatabase(String database) {
+			this.database = database;
+		}
+
+		public String getUsername() {
+			return username;
+		}
+
+		public void setUsername(String username) {
+			this.username = username;
+		}
+
+		public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			this.password = password;
+		}
+		
 	}
+
 }

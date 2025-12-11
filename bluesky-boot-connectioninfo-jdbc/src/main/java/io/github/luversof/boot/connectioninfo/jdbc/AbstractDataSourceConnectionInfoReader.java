@@ -13,13 +13,11 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
-import lombok.Getter;
 
 public abstract class AbstractDataSourceConnectionInfoReader<C extends DataSourceConnectionConfig> implements DataSourceConnectionInfoReader<C> {
 	
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
-	@Getter
 	protected String readerQuery = """
 		SELECT connection, url, username, password, extradata 
 		FROM DataSourceConnectionConfig
@@ -28,6 +26,10 @@ public abstract class AbstractDataSourceConnectionInfoReader<C extends DataSourc
 	
 	protected AbstractDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		this.connectionInfoProperties = connectionInfoProperties;
+	}
+
+	public String getReaderQuery() {
+		return readerQuery;
 	}
 	
 	/**

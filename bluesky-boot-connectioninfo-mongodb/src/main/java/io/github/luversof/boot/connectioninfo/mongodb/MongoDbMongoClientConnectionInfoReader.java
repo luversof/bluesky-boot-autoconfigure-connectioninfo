@@ -15,17 +15,20 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
-import lombok.Getter;
 
 public class MongoDbMongoClientConnectionInfoReader implements ConnectionInfoReader<MongoClientConnectionConfig>{
 
-	@Getter
 	protected String readerKey = "mongodb-mongoclient";
 	
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
 	public MongoDbMongoClientConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		this.connectionInfoProperties = connectionInfoProperties;
+	}
+
+	@Override
+	public String getReaderKey() {
+		return readerKey;
 	}
 
 	@Override

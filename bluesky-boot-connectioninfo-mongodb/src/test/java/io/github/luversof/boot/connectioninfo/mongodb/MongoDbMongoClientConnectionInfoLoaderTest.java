@@ -8,10 +8,12 @@ import org.junit.jupiter.api.Test;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties.ConnectionInfoLoaderProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties.ConnectionInfoReaderProperties;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 class MongoDbMongoClientConnectionInfoLoaderTest {
+
+	private static final Logger log = LoggerFactory.getLogger(MongoDbMongoClientConnectionInfoLoaderTest.class);
 
 	@Test
 	void test() {

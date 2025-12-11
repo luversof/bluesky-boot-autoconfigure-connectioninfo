@@ -6,15 +6,9 @@ import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * ConnectionInfoProperties
  */
-@Data
 @ConfigurationProperties(prefix = "bluesky-boot.connection-info")
 public class ConnectionInfoProperties {
 	
@@ -28,13 +22,25 @@ public class ConnectionInfoProperties {
 	 */
 	private Map<String, ConnectionInfoLoaderProperties> loaders = new HashMap<>();
 	
+	public Map<String, ConnectionInfoReaderProperties> getReaders() {
+		return readers;
+	}
+
+	public void setReaders(Map<String, ConnectionInfoReaderProperties> readers) {
+		this.readers = readers;
+	}
+
+	public Map<String, ConnectionInfoLoaderProperties> getLoaders() {
+		return loaders;
+	}
+
+	public void setLoaders(Map<String, ConnectionInfoLoaderProperties> loaders) {
+		this.loaders = loaders;
+	}
+
 	/**
 	 * Whether to use the devcheck controller or not
 	 */
-	@Data
-	@Builder
-	@NoArgsConstructor
-	@AllArgsConstructor
 	public static class ConnectionInfoReaderProperties {
 		
 		/**
@@ -47,16 +53,32 @@ public class ConnectionInfoProperties {
 		 * Currently used in an informal form.
 		 */
 		private Map<String, String> properties;
-		
-	}
 
-	/**
-	 * ConnectionInfoLoaderProperties
-	 */
-	@Data
-	@Builder
-	@NoArgsConstructor
-	@AllArgsConstructor
+		public ConnectionInfoReaderProperties() {
+		}
+
+		public ConnectionInfoReaderProperties(boolean enabled, Map<String, String> properties) {
+			this.enabled = enabled;
+			this.properties = properties;
+		}
+
+		public boolean isEnabled() {
+			return enabled;
+		}
+
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
+		}
+
+		public Map<String, String> getProperties() {
+			return properties;
+		}
+
+		public void setProperties(Map<String, String> properties) {
+			this.properties = properties;
+		}
+	}
+	
 	public static class ConnectionInfoLoaderProperties {
 		
 		/**
@@ -65,12 +87,33 @@ public class ConnectionInfoProperties {
 		private boolean enabled;
 		
 		/**
-		 * List of connections to use
+		 * Manage loader call information
+		 * Currently used in an informal form.
 		 */
 		private Map<String, List<String>> connections;
+
+		public ConnectionInfoLoaderProperties() {
+		}
+
+		public ConnectionInfoLoaderProperties(boolean enabled, Map<String, List<String>> connections) {
+			this.enabled = enabled;
+			this.connections = connections;
+		}
+
+		public boolean isEnabled() {
+			return enabled;
+		}
+
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
+		}
+
+		public Map<String, List<String>> getConnections() {
+			return connections;
+		}
+
+		public void setConnections(Map<String, List<String>> connections) {
+			this.connections = connections;
+		}
 	}
-	
-
-	
-
 }

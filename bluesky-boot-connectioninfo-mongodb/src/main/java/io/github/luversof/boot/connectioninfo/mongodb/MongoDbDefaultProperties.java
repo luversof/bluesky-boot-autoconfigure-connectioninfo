@@ -2,17 +2,12 @@ package io.github.luversof.boot.connectioninfo.mongodb;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * MongoDB 기본 설정값 Properties
  * 
  * <p>
  * connection-info.mongodb.* (connection-map 제외)
  */
-@Getter
-@Setter
 @ConfigurationProperties(prefix = "bluesky-boot.connection-info.mongodb")
 public class MongoDbDefaultProperties {
 
@@ -57,25 +52,116 @@ public class MongoDbDefaultProperties {
 	 * Write Concern 설정
 	 */
 	private WriteConcern writeConcern = new WriteConcern();
+	
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public Integer getPort() {
+		return port;
+	}
+
+	public void setPort(Integer port) {
+		this.port = port;
+	}
+
+	public String getAuthenticationDatabase() {
+		return authenticationDatabase;
+	}
+
+	public void setAuthenticationDatabase(String authenticationDatabase) {
+		this.authenticationDatabase = authenticationDatabase;
+	}
+
+	public String getReadPreference() {
+		return readPreference;
+	}
+
+	public void setReadPreference(String readPreference) {
+		this.readPreference = readPreference;
+	}
+
+	public String getReadConcernLevel() {
+		return readConcernLevel;
+	}
+
+	public void setReadConcernLevel(String readConcernLevel) {
+		this.readConcernLevel = readConcernLevel;
+	}
+
+	public String getUuidRepresentation() {
+		return uuidRepresentation;
+	}
+
+	public void setUuidRepresentation(String uuidRepresentation) {
+		this.uuidRepresentation = uuidRepresentation;
+	}
+
+	public ConnectionPool getConnectionPool() {
+		return connectionPool;
+	}
+
+	public void setConnectionPool(ConnectionPool connectionPool) {
+		this.connectionPool = connectionPool;
+	}
+
+	public WriteConcern getWriteConcern() {
+		return writeConcern;
+	}
+
+	public void setWriteConcern(WriteConcern writeConcern) {
+		this.writeConcern = writeConcern;
+	}
 
 	/**
 	 * Connection Pool 설정
 	 */
-	@Getter
-	@Setter
 	public static class ConnectionPool {
 		private Integer maxSize = 30;
 		private Integer minSize = 10;
 		private Long maxWaitTimeMs = 120000L;
 		private Long maxConnectionLifeTimeMs = 0L;
 		private Long maxConnectionIdleTimeMs = 0L;
+		public Integer getMaxSize() {
+			return maxSize;
+		}
+		public void setMaxSize(Integer maxSize) {
+			this.maxSize = maxSize;
+		}
+		public Integer getMinSize() {
+			return minSize;
+		}
+		public void setMinSize(Integer minSize) {
+			this.minSize = minSize;
+		}
+		public Long getMaxWaitTimeMs() {
+			return maxWaitTimeMs;
+		}
+		public void setMaxWaitTimeMs(Long maxWaitTimeMs) {
+			this.maxWaitTimeMs = maxWaitTimeMs;
+		}
+		public Long getMaxConnectionLifeTimeMs() {
+			return maxConnectionLifeTimeMs;
+		}
+		public void setMaxConnectionLifeTimeMs(Long maxConnectionLifeTimeMs) {
+			this.maxConnectionLifeTimeMs = maxConnectionLifeTimeMs;
+		}
+		public Long getMaxConnectionIdleTimeMs() {
+			return maxConnectionIdleTimeMs;
+		}
+		public void setMaxConnectionIdleTimeMs(Long maxConnectionIdleTimeMs) {
+			this.maxConnectionIdleTimeMs = maxConnectionIdleTimeMs;
+		}
+		
 	}
 
 	/**
 	 * Write Concern 설정
 	 */
-	@Getter
-	@Setter
 	public static class WriteConcern {
 		/**
 		 * W1, W2, W3, MAJORITY, ACKNOWLEDGED, UNACKNOWLEDGED
@@ -83,5 +169,24 @@ public class MongoDbDefaultProperties {
 		private String w = "W1";
 		private Integer wTimeoutMs = 5000;
 		private Boolean journal = false;
+		public String getW() {
+			return w;
+		}
+		public void setW(String w) {
+			this.w = w;
+		}
+		public Integer getwTimeoutMs() {
+			return wTimeoutMs;
+		}
+		public void setwTimeoutMs(Integer wTimeoutMs) {
+			this.wTimeoutMs = wTimeoutMs;
+		}
+		public Boolean getJournal() {
+			return journal;
+		}
+		public void setJournal(Boolean journal) {
+			this.journal = journal;
+		}
+		
 	}
 }

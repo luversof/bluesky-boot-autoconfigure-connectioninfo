@@ -7,18 +7,23 @@ import org.springframework.jdbc.core.RowMapper;
 
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
-import lombok.Getter;
-import lombok.SneakyThrows;
 
 public class MysqlDataSourceConnectionInfoReader extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
 
-	@Getter
 	protected String readerKey = "mysql-datasource";
 	
 	@Override
-	@SneakyThrows
+	public String getReaderKey() {
+		return readerKey;
+	}
+
+	@Override
 	protected Driver getReaderDriver() {
-		return new com.mysql.jdbc.Driver();
+		try {
+			return new com.mysql.jdbc.Driver();
+		} catch (java.sql.SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public MysqlDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {

@@ -13,8 +13,8 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Used when obtaining DataSource by loading connectionInfo from DB
@@ -22,17 +22,21 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @param <T> The type of DataSource to be loaded via Loader
  */
-@Slf4j
 public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSource, C extends DataSourceConnectionConfig> implements ConnectionInfoLoader<T, C> {
 	
+	protected final Logger log = LoggerFactory.getLogger(getClass());
+
 	protected final ConnectionInfoProperties connectionInfoProperties;
 	
-	@Getter
 	protected final List<ConnectionInfoReader<C>> connectionInfoReaderList;
 	
 	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<C>> connectionInfoReaderList) {
 		this.connectionInfoProperties= connectionInfoProperties;
 		this.connectionInfoReaderList = connectionInfoReaderList;
+	}
+
+	public List<ConnectionInfoReader<C>> getConnectionInfoReaderList() {
+		return connectionInfoReaderList;
 	}
 
 	@Override
