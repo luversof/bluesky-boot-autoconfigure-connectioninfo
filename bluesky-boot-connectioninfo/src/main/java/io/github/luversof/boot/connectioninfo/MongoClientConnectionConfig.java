@@ -8,16 +8,16 @@ public class MongoClientConnectionConfig implements ConnectionConfig {
 
 	@BsonProperty("connection")
 	private String connection;
-	
+
 	@BsonProperty("connectionString")
 	private String connectionString;
-	
+
 	@BsonProperty("database")
 	private String database;
-	
+
 	@BsonProperty("userName")
 	private String userName;
-	
+
 	@BsonProperty("password")
 	private String password;
 
@@ -63,30 +63,40 @@ public class MongoClientConnectionConfig implements ConnectionConfig {
 
 	@Override
 	public String toString() {
-		return "MongoClientConnectionConfig(connection=" + this.getConnection() + ", connectionString=" + this.getConnectionString() + ", database=" + this.getDatabase() + ", userName=" + this.getUserName() + ", password=" + this.getPassword() + ")";
+		return "MongoClientConnectionConfig(connection=" + this.getConnection() + ", connectionString="
+				+ this.getConnectionString() + ", database=" + this.getDatabase() + ", userName=" + this.getUserName()
+				+ ", password=" + this.getPassword() + ")";
 	}
 
 	@Override
 	public boolean equals(final Object o) {
-		if (o == this) return true;
-		if (!(o instanceof MongoClientConnectionConfig)) return false;
+		if (o == this)
+			return true;
+		if (!(o instanceof MongoClientConnectionConfig))
+			return false;
 		final MongoClientConnectionConfig other = (MongoClientConnectionConfig) o;
-		if (!other.canEqual((Object) this)) return false;
+		if (!other.canEqual((Object) this))
+			return false;
 		final Object this$connection = this.getConnection();
 		final Object other$connection = other.getConnection();
-		if (!Objects.equals(this$connection, other$connection)) return false;
+		if (!Objects.equals(this$connection, other$connection))
+			return false;
 		final Object this$connectionString = this.getConnectionString();
 		final Object other$connectionString = other.getConnectionString();
-		if (!Objects.equals(this$connectionString, other$connectionString)) return false;
+		if (!Objects.equals(this$connectionString, other$connectionString))
+			return false;
 		final Object this$database = this.getDatabase();
 		final Object other$database = other.getDatabase();
-		if (!Objects.equals(this$database, other$database)) return false;
+		if (!Objects.equals(this$database, other$database))
+			return false;
 		final Object this$userName = this.getUserName();
 		final Object other$userName = other.getUserName();
-		if (!Objects.equals(this$userName, other$userName)) return false;
+		if (!Objects.equals(this$userName, other$userName))
+			return false;
 		final Object this$password = this.getPassword();
 		final Object other$password = other.getPassword();
-		if (!Objects.equals(this$password, other$password)) return false;
+		if (!Objects.equals(this$password, other$password))
+			return false;
 		return true;
 	}
 

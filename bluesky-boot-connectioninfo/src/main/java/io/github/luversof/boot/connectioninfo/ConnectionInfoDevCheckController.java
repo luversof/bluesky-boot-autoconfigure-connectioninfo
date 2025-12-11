@@ -18,7 +18,7 @@ import io.github.luversof.boot.devcheck.annotation.DevCheckDescription;
 @DevCheckController
 @RequestMapping(value = "/blueskyBoot/connectionInfo", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ConnectionInfoDevCheckController {
-	
+
 	/**
 	 * connectionInfoRegistryList
 	 */
@@ -27,11 +27,12 @@ public class ConnectionInfoDevCheckController {
 	public ConnectionInfoDevCheckController(List<ConnectionInfoRegistry<?>> connectionInfoRegistryList) {
 		this.connectionInfoRegistryList = connectionInfoRegistryList;
 	}
-	
+
 	@DevCheckDescription("connectionInfoKeyList")
 	@GetMapping("/connectionInfoKeyList")
 	List<ConnectionInfoKey> connectionInfoKeyList() {
-		return connectionInfoRegistryList.stream().flatMap(x -> x.getConnectionInfoList().stream()).map(x -> x.getKey()).toList();
+		return connectionInfoRegistryList.stream().flatMap(x -> x.getConnectionInfoList().stream()).map(x -> x.getKey())
+				.toList();
 	}
-	
+
 }

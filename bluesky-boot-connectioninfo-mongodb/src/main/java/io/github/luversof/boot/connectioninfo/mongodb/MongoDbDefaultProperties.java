@@ -52,7 +52,7 @@ public class MongoDbDefaultProperties {
 	 * Write Concern 설정
 	 */
 	private WriteConcern writeConcern = new WriteConcern();
-	
+
 	public String getHost() {
 		return host;
 	}
@@ -126,37 +126,47 @@ public class MongoDbDefaultProperties {
 		private Long maxWaitTimeMs = 120000L;
 		private Long maxConnectionLifeTimeMs = 0L;
 		private Long maxConnectionIdleTimeMs = 0L;
+
 		public Integer getMaxSize() {
 			return maxSize;
 		}
+
 		public void setMaxSize(Integer maxSize) {
 			this.maxSize = maxSize;
 		}
+
 		public Integer getMinSize() {
 			return minSize;
 		}
+
 		public void setMinSize(Integer minSize) {
 			this.minSize = minSize;
 		}
+
 		public Long getMaxWaitTimeMs() {
 			return maxWaitTimeMs;
 		}
+
 		public void setMaxWaitTimeMs(Long maxWaitTimeMs) {
 			this.maxWaitTimeMs = maxWaitTimeMs;
 		}
+
 		public Long getMaxConnectionLifeTimeMs() {
 			return maxConnectionLifeTimeMs;
 		}
+
 		public void setMaxConnectionLifeTimeMs(Long maxConnectionLifeTimeMs) {
 			this.maxConnectionLifeTimeMs = maxConnectionLifeTimeMs;
 		}
+
 		public Long getMaxConnectionIdleTimeMs() {
 			return maxConnectionIdleTimeMs;
 		}
+
 		public void setMaxConnectionIdleTimeMs(Long maxConnectionIdleTimeMs) {
 			this.maxConnectionIdleTimeMs = maxConnectionIdleTimeMs;
 		}
-		
+
 	}
 
 	/**
@@ -169,24 +179,30 @@ public class MongoDbDefaultProperties {
 		private String w = "W1";
 		private Integer wTimeoutMs = 5000;
 		private Boolean journal = false;
+
 		public String getW() {
 			return w;
 		}
+
 		public void setW(String w) {
 			this.w = w;
 		}
+
 		public Integer getwTimeoutMs() {
 			return wTimeoutMs;
 		}
+
 		public void setwTimeoutMs(Integer wTimeoutMs) {
 			this.wTimeoutMs = wTimeoutMs;
 		}
+
 		public Boolean getJournal() {
 			return journal;
 		}
+
 		public void setJournal(Boolean journal) {
 			this.journal = journal;
 		}
-		
+
 	}
 }

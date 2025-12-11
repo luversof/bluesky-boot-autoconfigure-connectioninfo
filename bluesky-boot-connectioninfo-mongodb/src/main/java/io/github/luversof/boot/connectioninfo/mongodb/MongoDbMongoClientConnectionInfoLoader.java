@@ -20,17 +20,19 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
 
-public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoader<MongoClient, MongoClientConnectionConfig> {
-	
+public class MongoDbMongoClientConnectionInfoLoader
+		implements ConnectionInfoLoader<MongoClient, MongoClientConnectionConfig> {
+
 	private static final Logger log = LoggerFactory.getLogger(MongoDbMongoClientConnectionInfoLoader.class);
-	
+
 	protected String loaderKey = "mongoclient";
-	
+
 	protected final ConnectionInfoProperties connectionInfoProperties;
-	
+
 	protected final List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList;
-	
-	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList) {
+
+	public MongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties,
+			List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList) {
 		this.connectionInfoProperties = connectionInfoProperties;
 		this.connectionInfoReaderList = connectionInfoReaderList;
 	}
@@ -46,15 +48,16 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 
 	@Override
 	public List<ConnectionInfo<MongoClient>> load() {
-		if (connectionInfoProperties == null 
-				|| connectionInfoProperties.getLoaders() == null 
+		if (connectionInfoProperties == null
+				|| connectionInfoProperties.getLoaders() == null
 				|| !connectionInfoProperties.getLoaders().containsKey(getLoaderKey())
 				|| connectionInfoProperties.getLoaders().get(getLoaderKey()).getConnections() == null) {
 			return Collections.emptyList();
 		}
-		
-		List<String> connectionList = connectionInfoProperties.getLoaders().get(getLoaderKey()).getConnections().values().stream().flatMap(List::stream).distinct().toList();
-		
+
+		List<String> connectionList = connectionInfoProperties.getLoaders().get(getLoaderKey()).getConnections()
+				.values().stream().flatMap(List::stream).distinct().toList();
+
 		return load(connectionList);
 	}
 
@@ -63,12 +66,11 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		if (connectionList == null || connectionList.isEmpty()) {
 			return Collections.emptyList();
 		}
-		
-		
+
 		if (connectionInfoReaderList == null || connectionInfoReaderList.isEmpty()) {
 			return Collections.emptyList();
 		}
-		
+
 		var connectionConfigList = new ArrayList<MongoClientConnectionConfig>();
 		connectionInfoReaderList.forEach(connectionConfigReader -> {
 			var readConnectionConfigList = connectionConfigReader.readConnectionConfigList(connectionList);
@@ -76,16 +78,16 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 				connectionConfigList.addAll(readConnectionConfigList);
 			}
 		});
-		
 
 		connectionList.forEach(connection -> {
-			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.getConnection().equalsIgnoreCase(connection))) {
+			if (connectionConfigList.stream().anyMatch(
+					connetionInfoResult -> connetionInfoResult.getConnection().equalsIgnoreCase(connection))) {
 				log.debug("find database connection ({})", connection);
 			} else {
 				log.debug("cannot find database connection ({})", connection);
 			}
 		});
-		
+
 		if (connectionConfigList.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -96,15 +98,16 @@ public class MongoDbMongoClientConnectionInfoLoader implements ConnectionInfoLoa
 		}
 		return connectionInfoList;
 	}
-	
+
 	private ConnectionInfo<MongoClient> createConnectionInfo(MongoClientConnectionConfig connectionConfig) {
 		MongoClientSettings.builder()
-			.applyConnectionString(new ConnectionString(connectionConfig.getConnectionString()))
-			// adjust database
-			.build();
-		
+				.applyConnectionString(new ConnectionString(connectionConfig.getConnectionString()))
+				// adjust database
+				.build();
+
 		var mongoClient = MongoClients.create(connectionConfig.getConnectionString());
-		return new ConnectionInfo<>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.getConnection()), mongoClient);
+		return new ConnectionInfo<>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.getConnection()),
+				mongoClient);
 	}
 
 }

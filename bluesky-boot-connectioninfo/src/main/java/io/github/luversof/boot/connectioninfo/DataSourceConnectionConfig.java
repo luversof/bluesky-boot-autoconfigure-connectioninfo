@@ -4,15 +4,15 @@ import java.util.Map;
 import java.util.Objects;
 
 public class DataSourceConnectionConfig implements ConnectionConfig {
-	
+
 	private String connection;
-	
+
 	private String url;
-	
+
 	private String username;
-	
+
 	private String password;
-	
+
 	private Map<String, Object> extradata;
 
 	public String getConnection() {
@@ -57,30 +57,40 @@ public class DataSourceConnectionConfig implements ConnectionConfig {
 
 	@Override
 	public String toString() {
-		return "DataSourceConnectionConfig(connection=" + this.getConnection() + ", url=" + this.getUrl() + ", username=" + this.getUsername() + ", password=" + this.getPassword() + ", extradata=" + this.getExtradata() + ")";
+		return "DataSourceConnectionConfig(connection=" + this.getConnection() + ", url=" + this.getUrl()
+				+ ", username=" + this.getUsername() + ", password=" + this.getPassword() + ", extradata="
+				+ this.getExtradata() + ")";
 	}
 
 	@Override
 	public boolean equals(final Object o) {
-		if (o == this) return true;
-		if (!(o instanceof DataSourceConnectionConfig)) return false;
+		if (o == this)
+			return true;
+		if (!(o instanceof DataSourceConnectionConfig))
+			return false;
 		final DataSourceConnectionConfig other = (DataSourceConnectionConfig) o;
-		if (!other.canEqual((Object) this)) return false;
+		if (!other.canEqual((Object) this))
+			return false;
 		final Object this$connection = this.getConnection();
 		final Object other$connection = other.getConnection();
-		if (!Objects.equals(this$connection, other$connection)) return false;
+		if (!Objects.equals(this$connection, other$connection))
+			return false;
 		final Object this$url = this.getUrl();
 		final Object other$url = other.getUrl();
-		if (!Objects.equals(this$url, other$url)) return false;
+		if (!Objects.equals(this$url, other$url))
+			return false;
 		final Object this$username = this.getUsername();
 		final Object other$username = other.getUsername();
-		if (!Objects.equals(this$username, other$username)) return false;
+		if (!Objects.equals(this$username, other$username))
+			return false;
 		final Object this$password = this.getPassword();
 		final Object other$password = other.getPassword();
-		if (!Objects.equals(this$password, other$password)) return false;
+		if (!Objects.equals(this$password, other$password))
+			return false;
 		final Object this$extradata = this.getExtradata();
 		final Object other$extradata = other.getExtradata();
-		if (!Objects.equals(this$extradata, other$extradata)) return false;
+		if (!Objects.equals(this$extradata, other$extradata))
+			return false;
 		return true;
 	}
 
@@ -104,6 +114,5 @@ public class DataSourceConnectionConfig implements ConnectionConfig {
 		result = result * PRIME + ($extradata == null ? 43 : $extradata.hashCode());
 		return result;
 	}
-	
 
 }

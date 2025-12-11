@@ -49,7 +49,7 @@ public class MongoDbConnectionMapProperties {
 		 * 사용자명 (암호화 가능: {text}encrypted...)
 		 */
 		private String username;
-		
+
 		/**
 		 * 비밀번호 (암호화 가능: {text}encrypted...)
 		 */
@@ -86,7 +86,7 @@ public class MongoDbConnectionMapProperties {
 		public void setPassword(String password) {
 			this.password = password;
 		}
-		
+
 	}
 
 }

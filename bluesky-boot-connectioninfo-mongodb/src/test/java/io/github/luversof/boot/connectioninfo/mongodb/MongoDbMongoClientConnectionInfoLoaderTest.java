@@ -18,19 +18,22 @@ class MongoDbMongoClientConnectionInfoLoaderTest {
 	@Test
 	void test() {
 		var connectionInfoReaderProperties = new ConnectionInfoReaderProperties();
-		connectionInfoReaderProperties.setProperties(Map.of("connectionString", "mongodb://localhost:27017", "database", "connection_info_localdev"));
-		
+		connectionInfoReaderProperties.setProperties(
+				Map.of("connectionString", "mongodb://localhost:27017", "database", "connection_info_localdev"));
+
 		var connectionInfoLoaderProperties = new ConnectionInfoLoaderProperties();
 		connectionInfoLoaderProperties.setEnabled(true);
 		connectionInfoLoaderProperties.setConnections(Map.of("connExample", List.of("test1", "test2")));
-		
+
 		var connectionInfoProperties = new ConnectionInfoProperties();
 		connectionInfoProperties.getReaders().put("mongodb-mongoclient", connectionInfoReaderProperties);
 		connectionInfoProperties.getLoaders().put("mongoclient", connectionInfoLoaderProperties);
-		
-		MongoDbMongoClientConnectionInfoReader connectionInfoReader = new MongoDbMongoClientConnectionInfoReader(connectionInfoProperties);
-		
-		var mongoDbMongoClientConnectionInfoLoader = new MongoDbMongoClientConnectionInfoLoader(connectionInfoProperties, List.of(connectionInfoReader));
+
+		MongoDbMongoClientConnectionInfoReader connectionInfoReader = new MongoDbMongoClientConnectionInfoReader(
+				connectionInfoProperties);
+
+		var mongoDbMongoClientConnectionInfoLoader = new MongoDbMongoClientConnectionInfoLoader(
+				connectionInfoProperties, List.of(connectionInfoReader));
 		mongoDbMongoClientConnectionInfoLoader.load();
 		log.debug("Test :");
 	}

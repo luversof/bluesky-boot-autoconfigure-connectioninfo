@@ -8,10 +8,11 @@ import org.springframework.jdbc.core.RowMapper;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 
-public class MysqlDataSourceConnectionInfoReader extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
+public class MysqlDataSourceConnectionInfoReader
+		extends AbstractDataSourceConnectionInfoReader<DataSourceConnectionConfig> {
 
 	protected String readerKey = "mysql-datasource";
-	
+
 	@Override
 	public String getReaderKey() {
 		return readerKey;
@@ -25,7 +26,7 @@ public class MysqlDataSourceConnectionInfoReader extends AbstractDataSourceConne
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public MysqlDataSourceConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		super(connectionInfoProperties);
 	}

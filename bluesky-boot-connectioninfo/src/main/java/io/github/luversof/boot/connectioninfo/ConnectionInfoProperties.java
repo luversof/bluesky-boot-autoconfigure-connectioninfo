@@ -11,17 +11,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "bluesky-boot.connection-info")
 public class ConnectionInfoProperties {
-	
+
 	/**
 	 * Manage reader information for each reader.
 	 */
 	private Map<String, ConnectionInfoReaderProperties> readers = new HashMap<>();
-	
+
 	/**
-	 * Manage loader information for each loader and a list of connection targets to be called through the loader.
+	 * Manage loader information for each loader and a list of connection targets to
+	 * be called through the loader.
 	 */
 	private Map<String, ConnectionInfoLoaderProperties> loaders = new HashMap<>();
-	
+
 	public Map<String, ConnectionInfoReaderProperties> getReaders() {
 		return readers;
 	}
@@ -42,12 +43,12 @@ public class ConnectionInfoProperties {
 	 * Whether to use the devcheck controller or not
 	 */
 	public static class ConnectionInfoReaderProperties {
-		
+
 		/**
 		 * Whether to use this Loader or not
 		 */
 		private boolean enabled;
-		
+
 		/**
 		 * Manage loader call information
 		 * Currently used in an informal form.
@@ -78,14 +79,14 @@ public class ConnectionInfoProperties {
 			this.properties = properties;
 		}
 	}
-	
+
 	public static class ConnectionInfoLoaderProperties {
-		
+
 		/**
 		 * Whether to use this Loader or not
 		 */
 		private boolean enabled;
-		
+
 		/**
 		 * Manage loader call information
 		 * Currently used in an informal form.

@@ -12,11 +12,13 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 
-public class HikariDataSourceConnectionInfoLoader extends AbstractDataSourceConnectionInfoLoader<HikariDataSource, DataSourceConnectionConfig> {
+public class HikariDataSourceConnectionInfoLoader
+		extends AbstractDataSourceConnectionInfoLoader<HikariDataSource, DataSourceConnectionConfig> {
 
 	protected String loaderKey = "hikaridatasource";
 
-	public HikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<DataSourceConnectionConfig>> connectionInfoReaderList) {
+	public HikariDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties,
+			List<ConnectionInfoReader<DataSourceConnectionConfig>> connectionInfoReaderList) {
 		super(connectionInfoProperties, connectionInfoReaderList);
 	}
 
@@ -33,7 +35,8 @@ public class HikariDataSourceConnectionInfoLoader extends AbstractDataSourceConn
 		config.setUsername(textEncryptor.decrypt(connectionConfig.getUsername()));
 		config.setPassword(textEncryptor.decrypt(connectionConfig.getPassword()));
 		var hikariDataSource = new HikariDataSource(config);
-		
-		return new ConnectionInfo<>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.getConnection()), hikariDataSource);
+
+		return new ConnectionInfo<>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.getConnection()),
+				hikariDataSource);
 	}
 }

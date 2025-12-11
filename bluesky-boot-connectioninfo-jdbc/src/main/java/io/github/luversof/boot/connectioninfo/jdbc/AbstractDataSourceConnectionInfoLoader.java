@@ -18,20 +18,23 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Used when obtaining DataSource by loading connectionInfo from DB
+ * 
  * @author bluesky
  * 
  * @param <T> The type of DataSource to be loaded via Loader
  */
-public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSource, C extends DataSourceConnectionConfig> implements ConnectionInfoLoader<T, C> {
-	
+public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSource, C extends DataSourceConnectionConfig>
+		implements ConnectionInfoLoader<T, C> {
+
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
 	protected final ConnectionInfoProperties connectionInfoProperties;
-	
+
 	protected final List<ConnectionInfoReader<C>> connectionInfoReaderList;
-	
-	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<C>> connectionInfoReaderList) {
-		this.connectionInfoProperties= connectionInfoProperties;
+
+	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties,
+			List<ConnectionInfoReader<C>> connectionInfoReaderList) {
+		this.connectionInfoProperties = connectionInfoProperties;
 		this.connectionInfoReaderList = connectionInfoReaderList;
 	}
 
@@ -41,23 +44,26 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 
 	@Override
 	public List<ConnectionInfo<T>> load() {
-		if (connectionInfoProperties == null 
-				|| connectionInfoProperties.getLoaders() == null 
+		if (connectionInfoProperties == null
+				|| connectionInfoProperties.getLoaders() == null
 				|| !connectionInfoProperties.getLoaders().containsKey(getLoaderKey())
-				|| CollectionUtils.isEmpty(connectionInfoProperties.getLoaders().get(getLoaderKey()).getConnections())) {
+				|| CollectionUtils
+						.isEmpty(connectionInfoProperties.getLoaders().get(getLoaderKey()).getConnections())) {
 			return Collections.emptyList();
 		}
-		
-		List<String> connectionList = connectionInfoProperties.getLoaders().get(getLoaderKey()).getConnections().values().stream().flatMap(List::stream).distinct().toList();
-		
+
+		List<String> connectionList = connectionInfoProperties.getLoaders().get(getLoaderKey()).getConnections()
+				.values().stream().flatMap(List::stream).distinct().toList();
+
 		return load(connectionList);
 	}
 
 	@Override
 	public List<ConnectionInfo<T>> load(List<String> connectionList) {
-		
-		log.debug("connectionInfoReaderKeyList : {}", getConnectionInfoReaderList().stream().map(reader -> reader.getReaderKey()).toList());
-		
+
+		log.debug("connectionInfoReaderKeyList : {}",
+				getConnectionInfoReaderList().stream().map(reader -> reader.getReaderKey()).toList());
+
 		var connectionConfigList = new ArrayList<C>();
 		getConnectionInfoReaderList().forEach(connectionInfoReader -> {
 			var readConnectionConfigList = connectionInfoReader.readConnectionConfigList(connectionList);
@@ -65,15 +71,16 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 				connectionConfigList.addAll(readConnectionConfigList);
 			}
 		});
-		
+
 		connectionList.forEach(connection -> {
-			if (connectionConfigList.stream().anyMatch(connetionInfoResult -> connetionInfoResult.getConnection().equalsIgnoreCase(connection))) {
+			if (connectionConfigList.stream().anyMatch(
+					connetionInfoResult -> connetionInfoResult.getConnection().equalsIgnoreCase(connection))) {
 				log.debug("find database connection ({})", connection);
 			} else {
 				log.debug("cannot find database connection ({})", connection);
 			}
 		});
-		
+
 		if (CollectionUtils.isEmpty(connectionConfigList)) {
 			return Collections.emptyList();
 		}
@@ -82,10 +89,10 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 		for (var connectionConfig : connectionConfigList) {
 			connectionInfoList.add(createConnectionInfo(connectionConfig));
 		}
-		
+
 		return connectionInfoList;
 	}
-	
+
 	protected abstract ConnectionInfo<T> createConnectionInfo(DataSourceConnectionConfig connectionConfig);
-	
+
 }

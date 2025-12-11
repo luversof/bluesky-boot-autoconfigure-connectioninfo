@@ -16,12 +16,12 @@ import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
 import io.github.luversof.boot.connectioninfo.MongoClientConnectionConfig;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 
-public class MongoDbMongoClientConnectionInfoReader implements ConnectionInfoReader<MongoClientConnectionConfig>{
+public class MongoDbMongoClientConnectionInfoReader implements ConnectionInfoReader<MongoClientConnectionConfig> {
 
 	protected String readerKey = "mongodb-mongoclient";
-	
+
 	protected final ConnectionInfoProperties connectionInfoProperties;
-	
+
 	public MongoDbMongoClientConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
 		this.connectionInfoProperties = connectionInfoProperties;
 	}
@@ -33,7 +33,7 @@ public class MongoDbMongoClientConnectionInfoReader implements ConnectionInfoRea
 
 	@Override
 	public List<MongoClientConnectionConfig> readConnectionConfigList(List<String> connectionList) {
-		try(var loaderMongoClient = getLoaderMongoClient()) {
+		try (var loaderMongoClient = getLoaderMongoClient()) {
 			var mongoDatabase = loaderMongoClient.getDatabase(getConfigProperties("database"));
 			var mongoCollection = mongoDatabase.getCollection("MongoClientConnectionConfig");
 			var query = new Document("connection", new Document("$in", connectionList));
@@ -45,18 +45,17 @@ public class MongoDbMongoClientConnectionInfoReader implements ConnectionInfoRea
 	private MongoClient getLoaderMongoClient() {
 		var pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
 		var pojoCodecRegistry = CodecRegistries.fromRegistries(
-			MongoClientSettings.getDefaultCodecRegistry(),
-			CodecRegistries.fromProviders(pojoCodecProvider)
-		);
-		
+				MongoClientSettings.getDefaultCodecRegistry(),
+				CodecRegistries.fromProviders(pojoCodecProvider));
+
 		var settings = MongoClientSettings.builder()
-			.applyConnectionString(new com.mongodb.ConnectionString(getConfigProperties("connectionString")))
-			.codecRegistry(pojoCodecRegistry)
-			.build();
-			
+				.applyConnectionString(new com.mongodb.ConnectionString(getConfigProperties("connectionString")))
+				.codecRegistry(pojoCodecRegistry)
+				.build();
+
 		return MongoClients.create(settings);
 	}
-	
+
 	private String getConfigProperties(String key) {
 		var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
 		var loaderProperties = connectionInfoProperties.getReaders().get(getReaderKey()).getProperties();
