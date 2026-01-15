@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -38,17 +39,17 @@ public abstract class AbstractDataSourceConnectionInfoReader<C extends DataSourc
 	 * 
 	 * @return Target Driver object
 	 */
-	protected abstract Driver getReaderDriver();
+	protected abstract @NonNull Driver getReaderDriver();
 
 	@Override
-	public List<C> readConnectionConfigList(List<String> connectionList) {
+	public List<C> readConnectionConfigList(@NonNull List<String> connectionList) {
 		String sql = MessageFormat.format(getReaderQuery(),
 				String.join(",", Collections.nCopies(connectionList.size(), "?")));
 		return getJdbcTemplate().query(sql, new ArgumentPreparedStatementSetter(connectionList.toArray()),
 				getConnectionConfigRowMapper());
 	}
 
-	protected abstract RowMapper<C> getConnectionConfigRowMapper();
+	protected abstract @NonNull RowMapper<C> getConnectionConfigRowMapper();
 
 	private JdbcTemplate getJdbcTemplate() {
 		var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
