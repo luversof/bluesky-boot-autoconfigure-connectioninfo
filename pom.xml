@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>bluesky-boot-connectioninfo-build</artifactId>
 	<packaging>pom</packaging>
@@ -10,7 +10,7 @@
 	</parent>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A library for managing connectioninfo.</description>
-	<url>https://github.com/luversof/bluesky-boot-autoconfigure-connectioninfo</url>
+	<url>https://github.com/luversof/bluesky-boot-connectioninfo</url>
   
 	<modules>
 		<module>bluesky-boot-connectioninfo-parent</module>
@@ -33,9 +33,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:git://github.com/luversof/bluesky-boot-autoconfigure-connectioninfo.git</connection>
-		<developerConnection>scm:git:ssh://github.com:luversof/bluesky-boot-autoconfigure-connectioninfo.git</developerConnection>
-		<url>http://github.com/luversof/bluesky-boot-autoconfigure-connectioninfo/tree/main</url>
+		<connection>scm:git:git://github.com/luversof/bluesky-boot-connectioninfo.git</connection>
+		<developerConnection>scm:git:ssh://github.com:luversof/bluesky-boot-connectioninfo.git</developerConnection>
+		<url>http://github.com/luversof/bluesky-boot-connectioninfo/tree/main</url>
 	</scm>
 
 	<developers>
