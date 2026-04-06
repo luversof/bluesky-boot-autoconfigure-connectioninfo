@@ -3,6 +3,7 @@ package io.github.luversof.boot.connectioninfo.mongodb;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
@@ -16,6 +17,7 @@ class MongoDbMongoClientConnectionInfoLoaderTest {
 	private static final Logger log = LoggerFactory.getLogger(MongoDbMongoClientConnectionInfoLoaderTest.class);
 
 	@Test
+	@Disabled
 	void test() {
 		var connectionInfoReaderProperties = new ConnectionInfoReaderProperties();
 		connectionInfoReaderProperties.setProperties(

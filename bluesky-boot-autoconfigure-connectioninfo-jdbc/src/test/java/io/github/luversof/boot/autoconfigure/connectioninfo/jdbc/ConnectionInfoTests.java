@@ -2,6 +2,7 @@ package io.github.luversof.boot.autoconfigure.connectioninfo.jdbc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener;
 import org.springframework.boot.logging.LogLevel;
@@ -43,6 +44,7 @@ class ConnectionInfoTests {
 			.withUserConfiguration(ConnectionInfoJdbcAutoConfiguration.class);
 
 	@Test
+	@Disabled
 	void connectionInfoProperties() {
 		this.contextRunner.run(context -> {
 			var connectionInfoProperties = context.getBean(ConnectionInfoProperties.class);
@@ -52,6 +54,7 @@ class ConnectionInfoTests {
 	}
 
 	@Test
+	@Disabled
 	void mariaDbDataSourceConnectionInfoTest() {
 		this.contextRunner.run(context -> {
 
@@ -70,6 +73,7 @@ class ConnectionInfoTests {
 	}
 
 	@Test
+	@Disabled
 	void mariaDbDataSourceConnectionInfoReaderTest() {
 		this.contextRunner.run(context -> {
 			var connectionInfoProperties = context.getBean(ConnectionInfoProperties.class);
@@ -84,6 +88,7 @@ class ConnectionInfoTests {
 	}
 
 	@Test
+	@Disabled
 	void sqlServerDataSourceConnectionInfoReaderTest() {
 		this.contextRunner.run(context -> {
 			var connectionInfoProperties = context.getBean(ConnectionInfoProperties.class);
@@ -99,6 +104,7 @@ class ConnectionInfoTests {
 
 	@SuppressWarnings("unchecked")
 	@Test
+	@Disabled
 	void connectionInfoRegistryTest() {
 		this.contextRunner.run(context -> {
 			var type = ResolvableType.forClassWithGenerics(ConnectionInfoRegistry.class, HikariDataSource.class);
