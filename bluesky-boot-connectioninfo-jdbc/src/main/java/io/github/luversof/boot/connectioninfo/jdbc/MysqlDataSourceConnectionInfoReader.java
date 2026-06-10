@@ -21,7 +21,7 @@ public class MysqlDataSourceConnectionInfoReader
 	@Override
 	protected Driver getReaderDriver() {
 		try {
-			return new com.mysql.jdbc.Driver();
+			return new com.mysql.cj.jdbc.Driver();
 		} catch (java.sql.SQLException e) {
 			throw new RuntimeException(e);
 		}
