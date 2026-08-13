@@ -124,8 +124,8 @@ public class MongoDbDefaultProperties {
 		private Integer maxSize = 30;
 		private Integer minSize = 10;
 		private Long maxWaitTimeMs = 120000L;
-		private Long maxConnectionLifeTimeMs = 0L;
-		private Long maxConnectionIdleTimeMs = 0L;
+		private Long maxConnectionLifeTimeMs = 1800000L;
+		private Long maxConnectionIdleTimeMs = 120000L;
 
 		public Integer getMaxSize() {
 			return maxSize;

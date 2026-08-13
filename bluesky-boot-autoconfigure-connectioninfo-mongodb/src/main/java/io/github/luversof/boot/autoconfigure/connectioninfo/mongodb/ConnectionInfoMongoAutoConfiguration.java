@@ -1,7 +1,7 @@
 package io.github.luversof.boot.autoconfigure.connectioninfo.mongodb;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -27,44 +27,60 @@ import io.github.luversof.boot.connectioninfo.mongodb.MongoDbMongoClientConnecti
 import io.github.luversof.boot.connectioninfo.mongodb.PropertiesMongoClientConnectionInfoReader;
 
 @AutoConfiguration(
-		value = "blueskyBootConnectionInfoMongoAutoConfiguration", 
-		before = {
-			MongoAutoConfiguration.class,
-			ConnectionInfoAutoConfiguration.class
-		}
-	)
+    value = "blueskyBootConnectionInfoMongoAutoConfiguration",
+    before = {MongoAutoConfiguration.class, ConnectionInfoAutoConfiguration.class})
 @ConditionalOnClass(MongoClient.class)
-@EnableConfigurationProperties({ MongoDbDefaultProperties.class, MongoDbConnectionMapProperties.class })
+@EnableConfigurationProperties({
+  MongoDbDefaultProperties.class,
+  MongoDbConnectionMapProperties.class
+})
 @PropertySource("classpath:bluesky-boot-connectioninfo-mongodb-defaults.properties")
 public class ConnectionInfoMongoAutoConfiguration {
 
-	@Bean
-	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "mongo-mongoclient.enabled", havingValue = "true")
-	MongoDbMongoClientConnectionInfoReader mongoDbMongoClientConnectionInfoReader(ConnectionInfoProperties connectionInfoProperties) {
-		return new MongoDbMongoClientConnectionInfoReader(connectionInfoProperties);
-	}
-	
-	@Bean
-	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.readers", name = "properties-mongoclient.enabled", havingValue = "true")
-	PropertiesMongoClientConnectionInfoReader propertiesMongoClientConnectionInfoReader(
-			ConnectionInfoProperties connectionInfoProperties,
-			MongoDbDefaultProperties defaultProperties,
-			MongoDbConnectionMapProperties connectionMapProperties) {
-		return new PropertiesMongoClientConnectionInfoReader(connectionInfoProperties, defaultProperties,
-				connectionMapProperties);
-	}
-	
-	@Bean
-	@ConditionalOnProperty(prefix = "bluesky-boot.connection-info.loaders", name = "mongoclient.enabled", havingValue = "true")
-	MongoDbMongoClientConnectionInfoLoader mongoDbMongoClientConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties, List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList) {
-		return new MongoDbMongoClientConnectionInfoLoader(connectionInfoProperties, connectionInfoReaderList);
-	}
+  @Bean
+  @ConditionalOnProperty(
+      prefix = "bluesky-boot.connection-info.readers",
+      name = "mongo-mongoclient.enabled",
+      havingValue = "true")
+  MongoDbMongoClientConnectionInfoReader mongoDbMongoClientConnectionInfoReader(
+      ConnectionInfoProperties connectionInfoProperties) {
+    return new MongoDbMongoClientConnectionInfoReader(connectionInfoProperties);
+  }
 
-	@Bean
-	<T extends MongoClient, C extends MongoClientConnectionConfig> ConnectionInfoRegistry<T> mongoClientConnectionInfoRegistry(List<ConnectionInfoLoader<T, C>> connectionInfoLoaderList) {
-		var connectionInfoList = new ArrayList<ConnectionInfo<T>>();
-		connectionInfoLoaderList.forEach(connectionInfoLoader -> connectionInfoList.addAll(connectionInfoLoader.load()));
-		return () -> connectionInfoList;
-	}
+  @Bean
+  @ConditionalOnProperty(
+      prefix = "bluesky-boot.connection-info.readers",
+      name = "properties-mongoclient.enabled",
+      havingValue = "true")
+  PropertiesMongoClientConnectionInfoReader propertiesMongoClientConnectionInfoReader(
+      ConnectionInfoProperties connectionInfoProperties,
+      MongoDbDefaultProperties defaultProperties,
+      MongoDbConnectionMapProperties connectionMapProperties) {
+    return new PropertiesMongoClientConnectionInfoReader(
+        connectionInfoProperties, defaultProperties, connectionMapProperties);
+  }
 
+  @Bean
+  @ConditionalOnProperty(
+      prefix = "bluesky-boot.connection-info.loaders",
+      name = "mongoclient.enabled",
+      havingValue = "true")
+  MongoDbMongoClientConnectionInfoLoader mongoDbMongoClientConnectionInfoLoader(
+      ConnectionInfoProperties connectionInfoProperties,
+      List<ConnectionInfoReader<MongoClientConnectionConfig>> connectionInfoReaderList,
+      MongoDbDefaultProperties defaultProperties) {
+    return new MongoDbMongoClientConnectionInfoLoader(
+        connectionInfoProperties, connectionInfoReaderList, defaultProperties);
+  }
+
+  @Bean
+  <T extends MongoClient, C extends MongoClientConnectionConfig>
+      ConnectionInfoRegistry<T> mongoClientConnectionInfoRegistry(
+          List<ConnectionInfoLoader<T, C>> connectionInfoLoaderList) {
+    // LazyLoad(ConnectionInfoUtil.getConnection)로 런타임에 추가될 수 있어 조회/추가가 동시에 일어난다.
+    var connectionInfoList = new CopyOnWriteArrayList<ConnectionInfo<T>>();
+    connectionInfoLoaderList.forEach(
+        connectionInfoLoader -> connectionInfoList.addAll(connectionInfoLoader.load()));
+    return () -> connectionInfoList;
+  }
 }

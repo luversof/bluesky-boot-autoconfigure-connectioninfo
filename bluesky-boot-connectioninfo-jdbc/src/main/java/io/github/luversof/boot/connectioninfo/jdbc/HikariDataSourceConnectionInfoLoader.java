@@ -35,6 +35,8 @@ public class HikariDataSourceConnectionInfoLoader
 		config.setUsername(textEncryptor.decrypt(connectionConfig.getUsername()));
 		config.setPassword(textEncryptor.decrypt(connectionConfig.getPassword()));
 		var hikariDataSource = new HikariDataSource(config);
+		
+		createdDataSources.add(hikariDataSource);
 
 		return new ConnectionInfo<>(new ConnectionInfoKey(getLoaderKey(), connectionConfig.getConnection()),
 				hikariDataSource);

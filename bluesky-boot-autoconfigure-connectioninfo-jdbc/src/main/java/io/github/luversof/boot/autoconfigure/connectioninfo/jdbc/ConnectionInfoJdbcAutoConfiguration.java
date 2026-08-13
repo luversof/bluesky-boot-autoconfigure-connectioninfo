@@ -1,7 +1,7 @@
 package io.github.luversof.boot.autoconfigure.connectioninfo.jdbc;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.sql.DataSource;
 
@@ -95,7 +95,8 @@ public class ConnectionInfoJdbcAutoConfiguration {
 	
 	@Bean
 	<T extends HikariDataSource, C extends DataSourceConnectionConfig> ConnectionInfoRegistry<T> dataSourceConnectionInfoRegistry(List<ConnectionInfoLoader<T, C>> connectionInfoLoaderList) {
-		var connectionInfoList = new ArrayList<ConnectionInfo<T>>();
+		// LazyLoad(ConnectionInfoUtil.getConnection)로 런타임에 추가될 수 있어 조회/추가가 동시에 일어난다.
+		var connectionInfoList = new CopyOnWriteArrayList<ConnectionInfo<T>>();
 		connectionInfoLoaderList.forEach(connectionInfoLoader -> connectionInfoList.addAll(connectionInfoLoader.load()));
 		return () -> connectionInfoList;
 	}

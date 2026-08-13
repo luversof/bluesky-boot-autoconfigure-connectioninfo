@@ -3,18 +3,20 @@ package io.github.luversof.boot.connectioninfo.jdbc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfo;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoLoader;
 import io.github.luversof.boot.connectioninfo.ConnectionInfoProperties;
+import io.github.luversof.boot.connectioninfo.ConnectionInfoReader;
 import io.github.luversof.boot.connectioninfo.DataSourceConnectionConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Used when obtaining DataSource by loading connectionInfo from DB
@@ -31,6 +33,9 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 	protected final ConnectionInfoProperties connectionInfoProperties;
 
 	protected final List<ConnectionInfoReader<C>> connectionInfoReaderList;
+	
+	// 이 로더가 생성한 HikariDataSource들. 앱 종료 시 close()로 커넥션 풀을 반납하기 위해 추적한다.
+	protected final List<T> createdDataSources = new CopyOnWriteArrayList<>();
 
 	protected AbstractDataSourceConnectionInfoLoader(ConnectionInfoProperties connectionInfoProperties,
 			List<ConnectionInfoReader<C>> connectionInfoReaderList) {
@@ -68,13 +73,12 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 		getConnectionInfoReaderList().forEach(connectionInfoReader -> {
 			var readConnectionConfigList = connectionInfoReader.readConnectionConfigList(connectionList);
 			if (!CollectionUtils.isEmpty(readConnectionConfigList)) {
-				connectionConfigList.addAll(readConnectionConfigList);
+				addConnectionConfigList(connectionConfigList, readConnectionConfigList, connectionInfoReader);
 			}
 		});
 
 		connectionList.forEach(connection -> {
-			if (connectionConfigList.stream().anyMatch(
-					connetionInfoResult -> connetionInfoResult.getConnection().equalsIgnoreCase(connection))) {
+			if (containsConnection(connectionConfigList, connection)) {
 				log.debug("find database connection ({})", connection);
 			} else {
 				log.debug("cannot find database connection ({})", connection);
@@ -91,6 +95,39 @@ public abstract class AbstractDataSourceConnectionInfoLoader<T extends DataSourc
 		}
 
 		return connectionInfoList;
+	}
+	
+	/**
+	 * 리더가 조회한 설정을 connection 이름 기준으로 중복 없이 누적한다.
+	 *
+	 * <p>
+	 * 여러 리더가 같은 connection을 알고 있으면(예: mysql/mariadb 리더를 함께 사용) 같은 connection에
+	 * HikariDataSource가 중복 생성되고, registry에서 조회되지 않는 쪽은 커넥션 풀째로 닫히지 않은 채 남는다.
+	 * 먼저 조회된 리더의 설정을 유지한다.
+	 */
+	private void addConnectionConfigList(List<C> connectionConfigList,
+			List<C> readConnectionConfigList,
+			ConnectionInfoReader<C> connectionInfoReader) {
+		for (var connectionConfig : readConnectionConfigList) {
+			if (connectionConfig == null || !StringUtils.hasText(connectionConfig.getConnection())) {
+				log.warn("skip database connection without connection name from reader ({})",
+						connectionInfoReader.getReaderKey());
+				continue;
+			}
+
+			if (containsConnection(connectionConfigList, connectionConfig.getConnection())) {
+				log.warn("skip duplicated database connection ({}) from reader ({})", connectionConfig.getConnection(),
+						connectionInfoReader.getReaderKey());
+				continue;
+			}
+
+			connectionConfigList.add(connectionConfig);
+		}
+	}
+
+	private boolean containsConnection(List<C> connectionConfigList, String connection) {
+		return connectionConfigList.stream()
+			.anyMatch(connectionConfig -> connectionConfig.getConnection().equalsIgnoreCase(connection));
 	}
 
 	protected abstract ConnectionInfo<T> createConnectionInfo(DataSourceConnectionConfig connectionConfig);
